@@ -1,0 +1,1 @@
+## Buat kodingan sebelum final nanti bikin di folder sini dulu aja daps
