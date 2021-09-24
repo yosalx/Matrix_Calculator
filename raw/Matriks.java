@@ -274,4 +274,58 @@ class Matriks {
         det *= p;
         return det;
     }
+
+
+    Matriks Small_Matriks(Matrix m, int selected_row, int selected_col) { 
+        Matriks small = new Matriks();
+        small.createMatriks(m.Row()-1, m.Col()-1);
+        int r = -1; 
+        for (int i=0;i<m.Row();i++) {
+            if (i==selected_row) 
+                continue; 
+                r++; 
+                int c = -1; 
+            for (int j=0;j<m.Col();j++) {
+                if (j==selected_col) 
+                    continue; 
+                small.setValueAt(r, ++c, m.getElmt(i, j)); 
+            } 
+        } 
+        return small; 
+    }
+
+    double changeSign(int i){
+        return(-1*i);
+    }
+
+    double determinant(Matriks m)  { 
+        if (m.size()==2) {
+            return (m.getElmt(0, 0) * m.getElmt(1, 1)) - ( m.getElmt(0, 1) * m.getElmt(1, 0)); 
+        } 
+        double det = 0.0; 
+        for (int i=0; i<m.Col(); i++) { 
+            det += changeSign(i) * m.getElmt(0, i) * determinant(Small_Matriks(m, 0, i)); 
+        } 
+        return det; 
+    }
+
+    Matriks cofactor(Matriks m) { 
+        Matriks kofaktor = new Matriks(); 
+        kofaktor.createMatriks(m.Row, m.Col);
+        for (int i=0;i<m.Row;i++) { 
+            for (int j=0; j<m.Col;j++) {
+                kofaktor.setValueAt(i, j, sign(i) * changeSign(j) * determinant(Small_Matriks(m, i, j))); 
+            } 
+        } 
+        return kofaktor; 
+    }
+
+    double determinant_cofactor(Matriks m){
+        Matriks kofaktor = cofactor(m);
+        double determinant = 0.0;
+        for(int j=0; j< m.Col; j++){
+            determinant += m.getElmt(0,j)*kofaktor.getElmt(0, j);
+        }
+        return determinant;
+    }
 }
