@@ -52,18 +52,12 @@ class Matriks {
         int i, j;
         for (i = 0; i < this.Row; i++) {
             for (j = 0; j < this.Col; j++) {
-                if (j == this.Col - 1) {
-                    System.out.println(getElmt(i, j));
-                } else {
-                    System.out.println(getElmt(i, j) + " ");
-                }
+                System.out.printf("%.2f ", this.Mtrx[i][j]);
             }
-            if (i != this.Row - 1) {
-                System.out.println("\n");
-            }
-        }
+            System.out.print("\n");
+        }    
     }
-
+    
     boolean isSquare() {
         return (this.Row == this.Col);
     }
@@ -104,9 +98,9 @@ class Matriks {
     void Swap(int row1, int row2) {
         double temp;
         for (int j = 0; j < this.Col; j++) {
-            temp = Mtrx[row1][j];
-            Mtrx[row1][j] = Mtrx[row2][j];
-            Mtrx[row2][j] = temp;
+            temp = this.Mtrx[row2][j];
+            this.Mtrx[row2][j] = this.Mtrx[row1][j];
+            this.Mtrx[row1][j] = temp;
         }
     }
 
@@ -115,8 +109,8 @@ class Matriks {
         for (i = row + 1; i < this.Row; i++) {
             if (!isZero(i, col)) {
                 Swap(row, i);
+                break;
             }
-            break;
         }
     }
 
@@ -149,7 +143,7 @@ class Matriks {
         int i, j;
         double multiply, divide;
         int zeroCol = 0;
-        for (i = 0; i < this.Col; i++) {
+        for (i = 0; i < this.Row; i++) {
             for (j = i+zeroCol; j < this.Col; j++) {
                 if (isZero(i, j)) {
                     if (isBelowRowZero(i, j)) {
@@ -177,7 +171,7 @@ class Matriks {
             for (k = i+1; k < this.Row; k++) {
                 multiply = this.Mtrx[k][j];
                 for (int subj = j; subj < this.Col; subj++) {
-                    this.Mtrx[k][subj] *= this.Mtrx[i][subj]*multiply;
+                    this.Mtrx[k][subj] -= this.Mtrx[i][subj]*multiply;
                 }
             }
         }
@@ -187,7 +181,7 @@ class Matriks {
         int i, j;
         double multiply, divide;
         int zeroCol = 0;
-        for (i = 0; i < this.Col; i++) {
+        for (i = 0; i < this.Row; i++) {
             for (j = i+zeroCol; j < this.Col; j++) {
                 if (isZero(i, j)) {
                     if (isBelowRowZero(i, j)) {
@@ -218,19 +212,19 @@ class Matriks {
                 } else {
                     multiply = this.Mtrx[k][j];
                     for (int subj = j; subj < this.Col; subj++) {
-                        this.Mtrx[k][subj] *= this.Mtrx[i][subj]*multiply;
+                        this.Mtrx[k][subj] -= this.Mtrx[i][subj]*multiply;
                     } 
                 }
             }
         }
     }
 
-    double determinantReduksiBaris() {
+    double determinantReduksiBaris() { // returnnya belum bener
         int i, j;
         double multiply, divide;
         int zeroCol = 0;
-        double det = 1;
-        int cnt = 0;
+        double det = 1d;
+        double swap = -1d;
         for (i = 0; i < this.Col; i++) {
             for (j = i+zeroCol; j < this.Col; j++) {
                 if (isZero(i, j)) {
@@ -238,7 +232,7 @@ class Matriks {
                         zeroCol++;
                     } else {
                         swapZero(i, j);
-                        cnt += 1;
+                        det *= swap;
                         break;
                     }
                 } else {
@@ -261,32 +255,29 @@ class Matriks {
             for (k = i+1; k < this.Row; k++) {
                 multiply = this.Mtrx[k][j];
                 for (int subj = j; subj < this.Col; subj++) {
-                    this.Mtrx[k][subj] *= this.Mtrx[i][subj]*multiply;
+                    this.Mtrx[k][subj] -= this.Mtrx[i][subj]*multiply;
                 }
             }
         }
         for (i = 0; i < this.Row; i++) {
             if (Mtrx[i][i] == 0) {
-                det = 0;
+                det = 0d;
             }
         }
-        double p = Math.pow(-1, cnt);
-        det *= p;
         return det;
     }
-
-
-    Matriks Small_Matriks(Matrix m, int selected_row, int selected_col) { 
+    /*
+    Matriks Small_Matriks(Matriks m, int selected_row, int selected_col) { 
         Matriks small = new Matriks();
-        small.createMatriks(m.Row()-1, m.Col()-1);
+        small.createMatriks(m.Row-1, m.Col-1);
         int r = -1; 
-        for (int i=0;i<m.Row();i++) {
+        for (int i = 0;i < m.Row; i++) {
             if (i==selected_row) 
                 continue; 
                 r++; 
                 int c = -1; 
-            for (int j=0;j<m.Col();j++) {
-                if (j==selected_col) 
+            for (int j=0;j<m.Col;j++) {
+                if (j == selected_col) 
                     continue; 
                 small.setValueAt(r, ++c, m.getElmt(i, j)); 
             } 
@@ -299,11 +290,12 @@ class Matriks {
     }
 
     double determinant(Matriks m)  { 
-        if (m.size()==2) {
-            return (m.getElmt(0, 0) * m.getElmt(1, 1)) - ( m.getElmt(0, 1) * m.getElmt(1, 0)); 
-        } 
+        if (m.countElmt() == 2) {
+            return (m.getElmt(0, 0) * m.getElmt(1, 1)) - (m.getElmt(0, 1) * m.getElmt(1, 0)); 
+        }
+
         double det = 0.0; 
-        for (int i=0; i<m.Col(); i++) { 
+        for (int i=0; i < m.Col; i++) { 
             det += changeSign(i) * m.getElmt(0, i) * determinant(Small_Matriks(m, 0, i)); 
         } 
         return det; 
@@ -327,5 +319,5 @@ class Matriks {
             determinant += m.getElmt(0,j)*kofaktor.getElmt(0, j);
         }
         return determinant;
-    }
+    } */
 }
