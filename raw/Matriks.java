@@ -224,4 +224,53 @@ class Matriks {
             }
         }
     }
+    double determinant_reduksibaris() {
+        int i, j;
+        double multiply, divide;
+        int zeroCol = 0;
+        double det = 1;
+        int cnt = 0;
+        for (i = 0; i < this.Col; i++) {
+            for (j = i+zeroCol; j < this.Col; j++) {
+                if (isZero(i, j)) {
+                    if (isBelowRowZero(i, j)) {
+                        zeroCol++;
+                    } else {
+                        swapZero(i, j);
+                        cnt +=1;
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+            if (j >= this.Col) {
+                break;
+            }
+            divide = this.Mtrx[i][j];
+            if (divide == 0) {
+                j++;
+                divide = this.Mtrx[i][j];
+            }
+            int k;
+            det *= divide;
+            for (k = j; k < this.Col; k++) {
+                this.Mtrx[i][k] /= divide;
+            }
+            for (k = i+1; k < this.Row; k++) {
+                multiply = this.Mtrx[k][j];
+                for (int subj = j; subj < this.Col; subj++) {
+                    this.Mtrx[k][subj] *= this.Mtrx[i][subj]*multiply;
+                }
+            }
+        }
+        for (i=0; i < this.Col; i++) {
+            if (Mtrx[i][i] == 0) {
+                det = 0;
+            }
+        }
+        p = math.pow(-1, p);
+        det *= p;
+        return det;
+    }
 }
