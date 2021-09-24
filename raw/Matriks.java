@@ -224,7 +224,8 @@ class Matriks {
             }
         }
     }
-    double determinant_reduksibaris() {
+
+    double determinantReduksiBaris() {
         int i, j;
         double multiply, divide;
         int zeroCol = 0;
@@ -237,7 +238,7 @@ class Matriks {
                         zeroCol++;
                     } else {
                         swapZero(i, j);
-                        cnt +=1;
+                        cnt += 1;
                         break;
                     }
                 } else {
@@ -264,12 +265,12 @@ class Matriks {
                 }
             }
         }
-        for (i=0; i < this.Col; i++) {
+        for (i = 0; i < this.Row; i++) {
             if (Mtrx[i][i] == 0) {
                 det = 0;
             }
         }
-        p = math.pow(-1, p);
+        double p = Math.pow(-1, cnt);
         det *= p;
         return det;
     }
