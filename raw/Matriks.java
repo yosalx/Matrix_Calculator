@@ -83,7 +83,43 @@ class Matriks {
         }
         return ident;
     }
-    
+
+    boolean isZero(int row, int col) {
+        return this.Mtrx[row][col] == 0;
+    }
+
+    boolean isBelowRowZero(int row, int col) {
+        int i;
+        if (row + 1 >= this.Row) {
+            return true;
+        }
+        for (i = row + 1; i < this.Row; i++) {
+            if (!isZero(i, col)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void Swap(int row1, int row2) {
+        double temp;
+        for (int j = 0; j < this.Col; j++) {
+            temp = Mtrx[row1][j];
+            Mtrx[row1][j] = Mtrx[row2][j];
+            Mtrx[row2][j] = temp;
+        }
+    }
+
+    void swapZero(int row, int col) {
+        int i;
+        for (i = row + 1; i < this.Row; i++) {
+            if (!isZero(i, col)) {
+                Swap(row, i);
+            }
+            break;
+        }
+    }
+
     void multiplyRow(int row, double x) {
         int j;
         for (j = 0; j < this.Col; j++) {
@@ -109,9 +145,83 @@ class Matriks {
         plusRow(row1, row2, -x);
     }
 
-    void rowSwap(int row1, int row2) {
-        double[] temp = Mtrx[row1];
-        Mtrx[row1] = Mtrx[row2];
-        Mtrx[row2] = temp;
+    void elimGauss() {
+        int i, j;
+        double multiply, divide;
+        int zeroCol = 0;
+        for (i = 0; i < this.Col; i++) {
+            for (j = i+zeroCol; j < this.Col; j++) {
+                if (isZero(i, j)) {
+                    if (isBelowRowZero(i, j)) {
+                        zeroCol++;
+                    } else {
+                        swapZero(i, j);
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+            if (j >= this.Col) {
+                break;
+            }
+            divide = this.Mtrx[i][j];
+            if (divide == 0) {
+                j++;
+                divide = this.Mtrx[i][j];
+            }
+            int k;
+            for (k = j; k < this.Col; k++) {
+                this.Mtrx[i][k] /= divide;
+            }
+            for (k = i+1; k < this.Row; k++) {
+                multiply = this.Mtrx[k][j];
+                for (int subj = j; subj < this.Col; subj++) {
+                    this.Mtrx[k][subj] *= this.Mtrx[i][subj]*multiply;
+                }
+            }
+        }
+    }
+
+    void elimGaussJordan() {
+        int i, j;
+        double multiply, divide;
+        int zeroCol = 0;
+        for (i = 0; i < this.Col; i++) {
+            for (j = i+zeroCol; j < this.Col; j++) {
+                if (isZero(i, j)) {
+                    if (isBelowRowZero(i, j)) {
+                        zeroCol++;
+                    } else {
+                        swapZero(i, j);
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+            if (j >= this.Col) {
+                break;
+            }
+            divide = this.Mtrx[i][j];
+            if (divide == 0) {
+                j++;
+                divide = this.Mtrx[i][j];
+            }
+            int k;
+            for (k = j; k < this.Col; k++) {
+                this.Mtrx[i][k] /= divide;
+            }
+            for (k = 0; k < this.Row; k++) {
+                if (k == i) {
+                    continue;
+                } else {
+                    multiply = this.Mtrx[k][j];
+                    for (int subj = j; subj < this.Col; subj++) {
+                        this.Mtrx[k][subj] *= this.Mtrx[i][subj]*multiply;
+                    } 
+                }
+            }
+        }
     }
 }
