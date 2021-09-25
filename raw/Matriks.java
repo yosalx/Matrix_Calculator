@@ -387,4 +387,51 @@ class Matriks {
             }
         }
     }
+
+    void DeterminantC(){
+        System.out.println(this.getDeterminantC());
+    }
+
+    double getDeterminantC() {
+        if(this.Row == 1) return this.getElmt(0, 0); 
+
+        if(this.Row == 2) {                             
+            return this.getElmt(0, 0)*this.getElmt(1, 1) - this.getElmt(0, 1)*this.getElmt(1, 0);
+        }
+
+        double det;
+        det = 0;
+        for (int i = 0; i < this.Col; i++) {
+ 
+            Matriks m = new Matriks();
+            m = subMatriks(0, i);
+
+            det+= Math.pow(-1, i) * m.getDeterminantC();
+            
+        }
+        return det;
+    }
+
+    Matriks subMatriks (int i, int j) {
+
+        Matriks m = new Matriks();
+        m.createMatriks(this.Row - 1, this.Col - 1); 
+
+        int row =0 ,col=0;
+        for (int j2 = 0; j2 < this.Row; j2++) {
+            if(j2 == i) continue; 
+            for (int k = 0; k < this.Col; k++) {
+                if(k == j) continue;
+                m.Mtrx[row][col] = this.Mtrx[j2][k];
+                col++;
+                if(col >= m.Col) {
+                    col = 0;
+                    row++;
+                }
+            }
+        }
+        return m;
+    }
 }
+
+
