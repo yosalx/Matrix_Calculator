@@ -59,10 +59,6 @@ class Matriks {
             System.out.print("\n");
         }    
     }
-
-    void writeMatrixfromFile(String filename) {
-        
-    }
     
     boolean isSquare() {
         return (this.Row == this.Col);
@@ -346,25 +342,32 @@ class Matriks {
     }
 
     void polynomRead() {
-        double an, bn;
+        double an[];
+        double bn[];
+        an = new double[this.Col];
+        bn = new double[this.Col];
         int i, j;
         j = 0;
 
         for (i = 0; i < this.Row; i++) {
             this.Mtrx[i][j] = 1;
         }
-        for (i = 0; i < this.Col; i++) {
+
+        for (i = 0; i < this.Row; i++) {
             System.out.printf("Masukkan nilai untuk titik ke-%d : ", i + 1);
-            an = scanner.nextDouble();
-            bn = scanner.nextDouble();
+            an[i] = scanner.nextDouble();
+            bn[i] = scanner.nextDouble();
             for (j = 1; j < this.Col - 1; j++) {
-                this.Mtrx[i][j] = (double) Math.pow(an, j);
+                this.Mtrx[i][j] = (double) Math.pow(an[i], j);
             }
-            this.Mtrx[i][this.Col - 1] = bn;
+        }
+        // this.elimGaussJordan();
+        for (i = 0; i < this.Row; i++) {
+            this.Mtrx[i][this.Col - 1] = bn[i];
         }
     }
 
-    void inversGauss() {
+    void inversGaussWrite() {
         Matriks inv = new Matriks();
         inv.createMatriks(this.Row, this.Col);
         int i, j;
@@ -448,9 +451,195 @@ class Matriks {
         if (!isIdentity(this)) {
             System.out.println("Matriks tidak mempunyai invers");
         } else {
-            inv.writeMatrix();
+            this.Mtrx = inv.Mtrx;
+            this.writeMatrix();
         }
     }
+
+    Matriks inversGauss() {
+        Matriks inv = new Matriks();
+        inv.createMatriks(this.Row, this.Col);
+        int i, j;
+        for (i = 0; i < this.Row; i++) {
+            inv.Mtrx[i][i] = 1;
+        }
+        double divide, multiply;
+        int zeroCol = 0;
+        for (i = 0; i < this.Row; i++) {
+            for (j = i + zeroCol; j < this.Col; j++) {
+                if (isZero(i, i+zeroCol)) {
+                    if (isBelowRowZero(i, i)) {
+                        zeroCol++;
+                    } else {
+                        int a;
+                        for (a = i + 1; a < this.Row; a++) {
+                            if (!isZero(a, i)) {
+                                double temp;
+                                for (j = 0; j < this.Col; j++) {
+                                    temp = this.Mtrx[a][j];
+                                    this.Mtrx[a][j] = this.Mtrx[i][j];
+                                    this.Mtrx[i][j] = temp;
+                                    temp = inv.Mtrx[a][j];
+                                    inv.Mtrx[a][j] = inv.Mtrx[i][j];
+                                    inv.Mtrx[i][j] = temp;
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+
+            if (j >= this.Col) {
+                break;
+            }
+            divide = this.Mtrx[i][j];
+            while (divide == 0) {
+                j++;
+                divide = this.Mtrx[i][j];
+            }
+            int k;
+            for (k = j; k < this.Col; k++) {
+                this.Mtrx[i][k] /= divide;
+            }
+            for (k = 0; k < this.Col; k++) {
+                inv.Mtrx[i][k] /= divide;
+            }
+            for (k = i+1; k < this.Row; k++) {
+                multiply = this.Mtrx[k][j];
+                int subj;
+                for (subj = j; subj < this.Col; subj++) {
+                    this.Mtrx[k][subj] -= multiply*this.Mtrx[i][subj];
+                }
+                for (subj = 0; subj < this.Col; subj++) {
+                    inv.Mtrx[k][subj] -= multiply*inv.Mtrx[i][subj];
+                }
+            } 
+        }
+        for (i = 0; i < this.Row; i++) {
+            for (j = i; j < this.Col; j++) {
+                if (this.Mtrx[i][j] == 1) {
+                    int k;
+                    for (k = 0; k < i; k++) {
+                        if (!isZero(k, j)) {
+                            multiply = this.Mtrx[k][j];
+                            for (int subj = j; subj < this.Col; subj++) {
+                                this.Mtrx[k][subj] -= this.Mtrx[i][subj]*multiply;
+                            }
+                            for (int subj = 0; subj < this.Col; subj++) {
+                                inv.Mtrx[k][subj] -= inv.Mtrx[i][subj]*multiply;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (!isIdentity(this)) {
+            System.out.println("Matriks tidak mempunyai invers");
+        }
+        return inv;
+    }
+
+    void polynomInterpolate(boolean toFile) throws IOException {
+        double keepPoint[];
+        keepPoint = new double[this.Col - 1];
+        int i, j;
+        int zeroCol = 0;
+        this.elimGaussJordan();
+        for (i = 0; i < this.Row; i++) {
+            for (j = i + zeroCol; j < this.Col - 1; j++) {
+                if (this.Mtrx[i][j] == 1) {
+                    keepPoint[j] = this.Mtrx[i][this.Col - 1];
+                    break;
+                }
+                else {
+                    zeroCol++;
+                }
+            }
+        }
+        System.out.println("Persamaan akhir dari interpolasi adalah");
+        System.out.printf("P(x) = %.5f ", keepPoint[0]);
+        for (i = 1; i < this.Col - 1; i++) {
+            if (keepPoint[i] > 0) {
+                System.out.printf("+ %.5fx^%d ", keepPoint[i], i);
+            }
+            if (keepPoint[i] < 0) {
+                System.out.printf("+ (%.5fx^%d) ", keepPoint[i], i);
+            }
+        }
+        double find;
+        System.out.printf("\nNilai yang ingin ditaksir: ");
+        find = scanner.nextDouble();
+
+        double result = 0;
+        for (i = 0; i < this.Col - 1; i++) {
+            result += keepPoint[i] * Math.pow(find, i);
+        }
+        System.out.printf("P(%.5f) = %.5f\n", find, result);
+
+        /*if (toFile == true) {
+            PrintStream copyToFile = new PrintStream(new File("output.txt"));
+            System.setOut(copyToFile);
+            System.out.println("Persamaan akhir dari interpolasi adalah");
+            System.out.printf("P(x) = %.5f ", keepPoint[0]);
+            for (i = 1; i < this.Col - 1; i++) {
+                if (keepPoint[i] > 0) {
+                    System.out.printf("+ %.5fx^%d ", keepPoint[i], i);
+                }
+                if (keepPoint[i] < 0) {
+                    System.out.printf("+ (%.5fx^%d) ", keepPoint[i], i);
+                }
+            }
+            System.out.printf("P(%.5f) = %.5f\n", find, result);
+        }*/
+    }
+
+    void findSPLwithInv() {
+        Matriks matPers = new Matriks();
+        Matriks colHasil = new Matriks();
+        double solution[] = new double[this.Row];
+        int i, j;
+
+        matPers.createMatriks(this.Row, this.Col - 1);
+        colHasil.createMatriks(this.Row, 1);
+        for (i = 0; i < this.Row; i++) {
+            for (j = 0; j < this.Col - 1; j++) {
+                matPers.Mtrx[i][j] = this.Mtrx[i][j];
+            }
+        }
+        for (i = 0; i < this.Row; i++) {
+            colHasil.Mtrx[i][0] = this.Mtrx[i][this.Col - 1];
+        }
+
+        matPers.inversGaussWrite();
+        for (i = 0; i < this.Row; i++) {
+            for (j = 0; j < this.Col - 1; j++) {
+                solution[i] += matPers.Mtrx[i][j]*colHasil.Mtrx[j][0]; 
+            }
+        }
+        //matPers.writeMatrix();
+        //colHasil.writeMatrix();
+        for (i = 0; i < this.Row; i++) {
+            System.out.printf("x%d = %.5f ", i + 1, solution[i]);
+        }
+    }
+
+    /*void printToFile() {
+        try {
+            FileWriter w = new FileWriter(new PrintWriter("output.txt"));
+            for (int i = 0; i < this.Row; i++) {
+                for (int j = 0; j < this.Col; j++) {
+                    w.printf("%.2f", this.Mtrx[i][j]);
+                }
+                w.printf();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    } */
 }
 
 
