@@ -229,7 +229,7 @@ class Matriks {
         }
     }
 
-    void determinantOBE() {
+    double determinantOBE() {
         double determinant = 1;
         elimGauss();
         for (int i = 0; i < this.Row; i++) {
@@ -239,9 +239,7 @@ class Matriks {
             determinant = -(determinant);
         }
         determinant *= this.saveDividers;
-        System.out.printf("Jumlah pertukaran baris %d ", this.countSwap);
-        System.out.printf("Perkalian dari pembagi baris %.2f ", this.saveDividers);
-        System.out.printf("Determinan adalah %.2f ", determinant);
+        return determinant;
     }
     /*
     void determinantReduksiBaris() { // returnnya belum bener
@@ -346,4 +344,47 @@ class Matriks {
         }
         return determinant;
     } */
+
+    void kaidah_crammer () {
+        double det;
+        double subdet;
+        Matriks m1 = new Matriks();
+        Matriks m2 = new Matriks();
+
+        m1.createMatriks(this.Row, this.Col-1);
+        for (int i = 0; i < this.Row; i++) {
+            for (int j = 0; j < this.Col-1; j++) {
+                m1.Mtrx[i][j] = this.Mtrx[i][j];
+            }
+        }
+        m2.createMatriks(this.Row, 1);
+        for (int k = 0; k < this.Row; k++) {
+            m2.Mtrx[k][0] = this.Mtrx[k][this.Col-1];
+        }
+        det = determinantOBE();
+        if (det == 0) {
+            System.out.printf("determinan = 0, tidak bisa digunakan kaidah cramer");
+        }
+        else {
+            double sol;
+            for (int a = 0; a < this.Col-1; a++) {
+                Matriks submatrix = new Matriks();
+                submatrix.createMatriks(this.Row, this.Col-1);
+                for (int b = 0; b < this.Col-1; b++) {
+                    for (int c = 0; c < this.Row; c++) {
+                        if (a==b) {
+                            submatrix.Mtrx[c][b] = m2.Mtrx[c][0];
+                        }
+                        else {
+                            submatrix.Mtrx[c][b] = m1.Mtrx[c][b];
+                        }
+                    }
+                }
+                subdet = submatrix.determinantOBE();
+                sol = (subdet/det);
+                System.out.printf("solusi X%d = ", a+1);
+                System.out.printf("%.2f ", sol);
+            }
+        }
+    }
 }
