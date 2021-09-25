@@ -1,11 +1,13 @@
 package Tubes1.matriksgeming.raw;
 
 import java.util.*;
+import java.io.*;
 
 class Matriks {
     int RowMin = 0, RowMax = 100;
     int ColMin = 0, ColMax = 100;
-    int Row, Col;
+    int Row, Col, countSwap;
+    double saveDividers = 1;
     double[][] Mtrx;
     Scanner scanner = new Scanner(System.in);
 
@@ -57,6 +59,10 @@ class Matriks {
             System.out.print("\n");
         }    
     }
+
+    void writeMatrixfromFile(String filename) {
+        
+    }
     
     boolean isSquare() {
         return (this.Row == this.Col);
@@ -105,13 +111,16 @@ class Matriks {
     }
 
     void swapZero(int row, int col) {
-        int i;
+        int i, count;
+        count = 0;
         for (i = row + 1; i < this.Row; i++) {
             if (!isZero(i, col)) {
                 Swap(row, i);
                 break;
             }
         }
+        count++;
+        this.countSwap = count;
     }
 
     void multiplyRow(int row, double x) {
@@ -160,10 +169,11 @@ class Matriks {
                 break;
             }
             divide = this.Mtrx[i][j];
-            if (divide == 0) {
+            while (divide == 0) {
                 j++;
                 divide = this.Mtrx[i][j];
             }
+            this.saveDividers *= divide;
             int k;
             for (k = j; k < this.Col; k++) {
                 this.Mtrx[i][k] /= divide;
@@ -198,7 +208,7 @@ class Matriks {
                 break;
             }
             divide = this.Mtrx[i][j];
-            if (divide == 0) {
+            while (divide == 0) {
                 j++;
                 divide = this.Mtrx[i][j];
             }
@@ -219,12 +229,28 @@ class Matriks {
         }
     }
 
-    double determinantReduksiBaris() { // returnnya belum bener
+    void determinantOBE() {
+        double determinant = 1;
+        elimGauss();
+        for (int i = 0; i < this.Row; i++) {
+            determinant *= this.Mtrx[i][i];
+        }
+        if (this.countSwap % 2 == 1) {
+            determinant = -(determinant);
+        }
+        determinant *= this.saveDividers;
+        System.out.printf("Jumlah pertukaran baris %d ", this.countSwap);
+        System.out.printf("Perkalian dari pembagi baris %.2f ", this.saveDividers);
+        System.out.printf("Determinan adalah %.2f ", determinant);
+    }
+    /*
+    void determinantReduksiBaris() { // returnnya belum bener
         int i, j;
         double multiply, divide;
         int zeroCol = 0;
-        double det = 1d;
-        double swap = -1d;
+        double determinant = 0;
+        // double swap = -1;
+        determinant++;
         for (i = 0; i < this.Col; i++) {
             for (j = i+zeroCol; j < this.Col; j++) {
                 if (isZero(i, j)) {
@@ -232,7 +258,7 @@ class Matriks {
                         zeroCol++;
                     } else {
                         swapZero(i, j);
-                        det *= swap;
+                        determinant *= -1;
                         break;
                     }
                 } else {
@@ -243,12 +269,12 @@ class Matriks {
                 break;
             }
             divide = this.Mtrx[i][j];
-            if (divide == 0) {
+            while (divide == 0) {
                 j++;
                 divide = this.Mtrx[i][j];
             }
             int k;
-            det *= divide;
+            determinant *= divide;
             for (k = j; k < this.Col; k++) {
                 this.Mtrx[i][k] /= divide;
             }
@@ -261,11 +287,11 @@ class Matriks {
         }
         for (i = 0; i < this.Row; i++) {
             if (Mtrx[i][i] == 0) {
-                det = 0d;
+                determinant = 0;
             }
         }
-        return det;
-    }
+        System.out.printf("Determinan adalah %.2f", determinant);
+    }*/
     /*
     Matriks Small_Matriks(Matriks m, int selected_row, int selected_col) { 
         Matriks small = new Matriks();
