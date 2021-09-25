@@ -241,109 +241,6 @@ class Matriks {
         determinant *= this.saveDividers;
         return determinant;
     }
-    /*
-    void determinantReduksiBaris() { // returnnya belum bener
-        int i, j;
-        double multiply, divide;
-        int zeroCol = 0;
-        double determinant = 0;
-        // double swap = -1;
-        determinant++;
-        for (i = 0; i < this.Col; i++) {
-            for (j = i+zeroCol; j < this.Col; j++) {
-                if (isZero(i, j)) {
-                    if (isBelowRowZero(i, j)) {
-                        zeroCol++;
-                    } else {
-                        swapZero(i, j);
-                        determinant *= -1;
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
-            if (j >= this.Col) {
-                break;
-            }
-            divide = this.Mtrx[i][j];
-            while (divide == 0) {
-                j++;
-                divide = this.Mtrx[i][j];
-            }
-            int k;
-            determinant *= divide;
-            for (k = j; k < this.Col; k++) {
-                this.Mtrx[i][k] /= divide;
-            }
-            for (k = i+1; k < this.Row; k++) {
-                multiply = this.Mtrx[k][j];
-                for (int subj = j; subj < this.Col; subj++) {
-                    this.Mtrx[k][subj] -= this.Mtrx[i][subj]*multiply;
-                }
-            }
-        }
-        for (i = 0; i < this.Row; i++) {
-            if (Mtrx[i][i] == 0) {
-                determinant = 0;
-            }
-        }
-        System.out.printf("Determinan adalah %.2f", determinant);
-    }*/
-    /*
-    Matriks Small_Matriks(Matriks m, int selected_row, int selected_col) { 
-        Matriks small = new Matriks();
-        small.createMatriks(m.Row-1, m.Col-1);
-        int r = -1; 
-        for (int i = 0;i < m.Row; i++) {
-            if (i==selected_row) 
-                continue; 
-                r++; 
-                int c = -1; 
-            for (int j=0;j<m.Col;j++) {
-                if (j == selected_col) 
-                    continue; 
-                small.setValueAt(r, ++c, m.getElmt(i, j)); 
-            } 
-        } 
-        return small; 
-    }
-
-    double changeSign(int i){
-        return(-1*i);
-    }
-
-    double determinant(Matriks m)  { 
-        if (m.countElmt() == 2) {
-            return (m.getElmt(0, 0) * m.getElmt(1, 1)) - (m.getElmt(0, 1) * m.getElmt(1, 0)); 
-        }
-
-        double det = 0.0; 
-        for (int i=0; i < m.Col; i++) { 
-            det += changeSign(i) * m.getElmt(0, i) * determinant(Small_Matriks(m, 0, i)); 
-        } 
-        return det; 
-    }
-
-    Matriks cofactor(Matriks m) { 
-        Matriks kofaktor = new Matriks(); 
-        kofaktor.createMatriks(m.Row, m.Col);
-        for (int i=0;i<m.Row;i++) { 
-            for (int j=0; j<m.Col;j++) {
-                kofaktor.setValueAt(i, j, sign(i) * changeSign(j) * determinant(Small_Matriks(m, i, j))); 
-            } 
-        } 
-        return kofaktor; 
-    }
-
-    double determinant_cofactor(Matriks m){
-        Matriks kofaktor = cofactor(m);
-        double determinant = 0.0;
-        for(int j=0; j< m.Col; j++){
-            determinant += m.getElmt(0,j)*kofaktor.getElmt(0, j);
-        }
-        return determinant;
-    } */
 
     void kaidah_crammer () {
         double det;
@@ -431,6 +328,128 @@ class Matriks {
             }
         }
         return m;
+    }
+
+    void writeMatrixfromFile() throws IOException {
+        BufferedReader input = new BufferedReader(new FileReader("tes.txt"));
+        String data = input.readLine();
+
+        int i, j;
+        for (i = 0; i < this.Row; i++) {
+            StringTokenizer string = new StringTokenizer(data, " ");
+            for (j = 0; j < this.Col; j++) {
+                this.Mtrx[i][j] = Double.valueOf(string.nextToken()).doubleValue();
+            }
+            data = input.readLine();
+        }
+        this.writeMatrix();
+    }
+
+    void polynomRead() {
+        double an, bn;
+        int i, j;
+        j = 0;
+
+        for (i = 0; i < this.Row; i++) {
+            this.Mtrx[i][j] = 1;
+        }
+        for (i = 0; i < this.Col; i++) {
+            System.out.printf("Masukkan nilai untuk titik ke-%d : ", i + 1);
+            an = scanner.nextDouble();
+            bn = scanner.nextDouble();
+            for (j = 1; j < this.Col - 1; j++) {
+                this.Mtrx[i][j] = (double) Math.pow(an, j);
+            }
+            this.Mtrx[i][this.Col - 1] = bn;
+        }
+    }
+
+    void inversGauss() {
+        Matriks inv = new Matriks();
+        inv.createMatriks(this.Row, this.Col);
+        int i, j;
+        for (i = 0; i < this.Row; i++) {
+            inv.Mtrx[i][i] = 1;
+        }
+        double divide, multiply;
+        int zeroCol = 0;
+        for (i = 0; i < this.Row; i++) {
+            for (j = i + zeroCol; j < this.Col; j++) {
+                if (isZero(i, i+zeroCol)) {
+                    if (isBelowRowZero(i, i)) {
+                        zeroCol++;
+                    } else {
+                        int a;
+                        for (a = i + 1; a < this.Row; a++) {
+                            if (!isZero(a, i)) {
+                                double temp;
+                                for (j = 0; j < this.Col; j++) {
+                                    temp = this.Mtrx[a][j];
+                                    this.Mtrx[a][j] = this.Mtrx[i][j];
+                                    this.Mtrx[i][j] = temp;
+                                    temp = inv.Mtrx[a][j];
+                                    inv.Mtrx[a][j] = inv.Mtrx[i][j];
+                                    inv.Mtrx[i][j] = temp;
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+
+            if (j >= this.Col) {
+                break;
+            }
+            divide = this.Mtrx[i][j];
+            while (divide == 0) {
+                j++;
+                divide = this.Mtrx[i][j];
+            }
+            int k;
+            for (k = j; k < this.Col; k++) {
+                this.Mtrx[i][k] /= divide;
+            }
+            for (k = 0; k < this.Col; k++) {
+                inv.Mtrx[i][k] /= divide;
+            }
+            for (k = i+1; k < this.Row; k++) {
+                multiply = this.Mtrx[k][j];
+                int subj;
+                for (subj = j; subj < this.Col; subj++) {
+                    this.Mtrx[k][subj] -= multiply*this.Mtrx[i][subj];
+                }
+                for (subj = 0; subj < this.Col; subj++) {
+                    inv.Mtrx[k][subj] -= multiply*inv.Mtrx[i][subj];
+                }
+            } 
+        }
+        for (i = 0; i < this.Row; i++) {
+            for (j = i; j < this.Col; j++) {
+                if (this.Mtrx[i][j] == 1) {
+                    int k;
+                    for (k = 0; k < i; k++) {
+                        if (!isZero(k, j)) {
+                            multiply = this.Mtrx[k][j];
+                            for (int subj = j; subj < this.Col; subj++) {
+                                this.Mtrx[k][subj] -= this.Mtrx[i][subj]*multiply;
+                            }
+                            for (int subj = 0; subj < this.Col; subj++) {
+                                inv.Mtrx[k][subj] -= inv.Mtrx[i][subj]*multiply;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (!isIdentity(this)) {
+            System.out.println("Matriks tidak mempunyai invers");
+        } else {
+            inv.writeMatrix();
+        }
     }
 }
 
