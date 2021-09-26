@@ -10,8 +10,8 @@ public class Driver {
         m.readMatrix();
         //m.polynomRead();
         m.writeMatrix();
-        m.inversGaussWrite();
-        System.out.println();
+        System.out.println("\n");
+        m.adjoint_invers();
         //m.findSPLwithInv();
         // m.polynomInterpolate(true);
     }

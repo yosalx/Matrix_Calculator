@@ -144,6 +144,17 @@ class Matriks {
         plusRow(row1, row2, -x);
     }
 
+    void transpose(){
+        for (int i = 0; i < this.Row; i++){
+            for (int j = 0; j < i; j++){
+                double temp;
+                temp = this.Mtrx[j][i];
+                this.Mtrx[j][i] = this.Mtrx[i][j];
+                this.Mtrx[i][j] = temp;
+            }
+        }
+    } 
+
     void elimGauss() {
         int i, j;
         double multiply, divide;
@@ -258,6 +269,18 @@ class Matriks {
         System.out.printf("Determinan adalah %.2f ", det);
     }
 
+
+    Matriks cofactor(Matriks m){
+        Matriks sub;
+        for (int i = 0; i < this.Row; i++) {
+            for (int j = 0; j < this.Col; j++) {
+                sub = subMatriks(i, j);
+                m.Mtrx[i][j] = (double) (Math.pow(-1, i + j) * sub.determinantOBE());
+            }
+        }
+        return m;
+    }
+
     Matriks subMatriks(int i, int j) {
 
         Matriks m = new Matriks();
@@ -360,6 +383,29 @@ class Matriks {
         for (i = 0; i < this.Row; i++) {
             this.Mtrx[i][this.Col - 1] = bn[i];
         }
+    }
+
+    void adjoint_invers(){
+        Matriks n = new Matriks();
+        Matriks o = new Matriks();
+
+        n.createMatriks(this.Row, this.Col);
+        o.createMatriks(this.Row, this.Col);
+
+        o = this.cofactor(n);
+        o.transpose();
+
+        double det;
+        det = this.determinantOBE();
+
+        for(int i=0; i<this.Row;i++){
+            for(int j=0; j<this.Col;j++){
+                o.Mtrx[i][j] = ((1/det)*(o.Mtrx[i][j]));
+            }
+        }
+
+        o.writeMatrix();
+        System.out.println("\n");
     }
 
     void inversGaussWrite() {
