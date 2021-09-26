@@ -326,7 +326,7 @@ class Matriks {
         return m;
     }
 
-    void writeMatrixfromFile() throws IOException {
+    void readMatrixfromFile() throws IOException {
         BufferedReader input = new BufferedReader(new FileReader("tes.txt"));
         String data = input.readLine();
 
@@ -338,7 +338,6 @@ class Matriks {
             }
             data = input.readLine();
         }
-        this.writeMatrix();
     }
 
     void polynomRead() {
