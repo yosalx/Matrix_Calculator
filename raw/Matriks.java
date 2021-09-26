@@ -393,7 +393,14 @@ class Matriks {
         o.createMatriks(this.Row, this.Col);
 
         o = this.cofactor(n);
+        System.out.println("Kofaktor dari matriks tersebut adalah:\n");
+        o.writeMatrix();
+        System.out.println("\n");
+
         o.transpose();
+        System.out.println("Adjoint dari matriks tersebut adalah:\n");
+        o.writeMatrix();
+        System.out.println("\n");
 
         double det;
         det = this.determinantOBE();
@@ -403,7 +410,7 @@ class Matriks {
                 o.Mtrx[i][j] = ((1/det)*(o.Mtrx[i][j]));
             }
         }
-
+        System.out.println("Sehinnga balikan dari matriks tersebut adalah: \n");
         o.writeMatrix();
         System.out.println("\n");
     }

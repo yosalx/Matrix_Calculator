@@ -121,7 +121,20 @@ public class Main {
                     }
                 }
                 if (choiceMethod == 2) {
-                    break; // belom ada fungsinya
+                    System.out.printf("Pilih 0 untuk memasukkan matriks secara langsung dan 1 untuk membaca dari file: ");
+                    int choiceRead = choice.nextInt();
+                    if (choiceRead == 0) {
+                        int row, col;
+                        System.out.printf("Masukkan ukuran baris: ");
+                        row = choice.nextInt();
+                        System.out.printf("Masukkan ukuran kolom: ");
+                        col = choice.nextInt();
+                        Matriks m = new Matriks();
+                        m.createMatriks(row, col);
+                        System.out.println("Isi matriks di bawah ini: ");
+                        m.readMatrix();
+                        m.adjoint_invers();
+                    }
                 }
                 break;
             case 3:
@@ -143,7 +156,7 @@ public class Main {
                         m.createMatriks(row, col);
                         System.out.println("Isi matriks di bawah ini: ");
                         m.readMatrix();
-                        System.out.println(m.determinantOBE());
+                        m.getDeterminantOBE();
                     }
                     if (choiceRead == 1) {
                         int row, col;
@@ -170,8 +183,11 @@ public class Main {
                         m.createMatriks(row, col);
                         System.out.println("Isi matriks di bawah ini: ");
                         m.readMatrix();
-                        m.DeterminantC();
+                        Matriks n = new Matriks();
+                        n.createMatriks(row, col);
+                        m.getDeterminantC(n);
                     }
+
                     if (choiceRead == 1) {
                         int row, col;
                         System.out.printf("Masukkan ukuran baris: ");
