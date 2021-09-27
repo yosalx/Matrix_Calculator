@@ -37,24 +37,28 @@ public class Matriks {
         return this.Row * this.Col;
     }
 
-    double getElmt(int row, int col) {
+    public double getElmt(int row, int col) {
         return this.Mtrx[row][col];
+    }
+
+    public void setElmt(int row, int col) {
+        this.Mtrx[row][col] = scanner.nextDouble();
     }
 
     public void readMatrix() {
         int i, j;
-        for (i = 0; i < this.Row; i++) {
-            for (j = 0; j < this.Col; j++) {
-                this.Mtrx[i][j] = scanner.nextDouble();
+        for (i = RowMin; i < this.Row; i++) {
+            for (j = ColMin; j < this.Col; j++) {
+                setElmt(i, j);
             }
         }
     }
 
     public void writeMatrix() {
         int i, j;
-        for (i = 0; i < this.Row; i++) {
-            for (j = 0; j < this.Col; j++) {
-                System.out.printf("%.2f ", this.Mtrx[i][j]);
+        for (i = RowMin; i < this.Row; i++) {
+            for (j = ColMin; j < this.Col; j++) {
+                System.out.printf("%.2f ", getElmt(i, j));
             }
             System.out.print("\n");
         }    
@@ -67,8 +71,8 @@ public class Matriks {
     public boolean isIdentity(Matriks m) {
         int i, j;
         boolean ident = true;
-        for (i = 0; i < this.Row; i++) {
-            for (j = 0; j < this.Col; j++) {
+        for (i = RowMin; i < this.Row; i++) {
+            for (j = ColMin; j < this.Col; j++) {
                 if ((i == j) && (m.Mtrx[i][j] != 1)) {
                     return false;
                 }
@@ -81,7 +85,7 @@ public class Matriks {
     }
 
     public boolean isZero(int row, int col) {
-        return this.Mtrx[row][col] == 0;
+        return getElmt(row, col) == 0;
     }
 
     public boolean isBelowRowZero(int row, int col) {
@@ -99,9 +103,9 @@ public class Matriks {
 
     public void Swap(int row1, int row2) {
         double temp;
-        for (int j = 0; j < this.Col; j++) {
-            temp = this.Mtrx[row2][j];
-            this.Mtrx[row2][j] = this.Mtrx[row1][j];
+        for (int j = ColMin; j < this.Col; j++) {
+            temp = getElmt(row2, j);
+            this.Mtrx[row2][j] = getElmt(row1, j);
             this.Mtrx[row1][j] = temp;
         }
     }
@@ -145,11 +149,11 @@ public class Matriks {
     }
 
     public void transpose(){
-        for (int i = 0; i < this.Row; i++){
-            for (int j = 0; j < i; j++){
+        for (int i = RowMin; i < this.Row; i++){
+            for (int j = ColMin; j < i; j++){
                 double temp;
-                temp = this.Mtrx[j][i];
-                this.Mtrx[j][i] = this.Mtrx[i][j];
+                temp = getElmt(j, i);
+                this.Mtrx[j][i] = getElmt(i, j);
                 this.Mtrx[i][j] = temp;
             }
         }
@@ -159,7 +163,7 @@ public class Matriks {
         int i, j;
         double multiply, divide;
         int zeroCol = 0;
-        for (i = 0; i < this.Row; i++) {
+        for (i = RowMin; i < this.Row; i++) {
             for (j = i+zeroCol; j < this.Col; j++) {
                 if (isZero(i, j)) {
                     if (isBelowRowZero(i, j)) {
@@ -175,7 +179,7 @@ public class Matriks {
             if (j >= this.Col) {
                 break;
             }
-            divide = this.Mtrx[i][j];
+            divide = getElmt(i, j);
             while (divide == 0) {
                 j++;
                 divide = this.Mtrx[i][j];
