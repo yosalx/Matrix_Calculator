@@ -735,6 +735,78 @@ public class Matriks {
             }
         }
     }
+
+
+    void double_regression(int n_factor){
+        Matriks m = new Matriks();
+        m.createMatriks(this.Col, this.Col+1);
+        int row, col;
+        for(row = 0; row < m.Row; row++){
+            for(col = 0; col < m.Col; col++){
+                if(row == 0 && col == 0){
+                    m.Mtrx[row][col] = this.Row;
+                }
+                else if((row == 0 && col != 0)){
+                    m.Mtrx[row][col] = 0;
+                    int sec_row;
+                    for(sec_row = 0; sec_row < this.Row; sec_row++){
+                        m.Mtrx[row][col] += this.Mtrx[sec_row][col-1];
+                    }
+                }
+                else if((row != 0 && col == 0)){
+                    m.Mtrx[row][col] = 0;
+                    int sec_row;
+                    for(sec_row = 0; sec_row < this.Row; sec_row++){
+                        m.Mtrx[row][col] += this.Mtrx[sec_row][row-1];
+                    }
+                }
+                else{
+                    m.Mtrx[row][col] = 0;
+                    int sec_row;
+                    for(sec_row = 0; sec_row < this.Row; sec_row++){
+                        m.Mtrx[row][col] += this.Mtrx[sec_row][row-1] * this.Mtrx[sec_row][col-1];
+                    }
+                }
+
+            }
+        }
+        m.elimGaussJordan();
+        System.out.printf("\nModel Regresi Linear Berganda dari persamaan yang diberikan adalah: Y = %6.4f", m.Mtrx[0][m.Col-1]);
+        int i;
+        for (i = 1; i < m.Row ; i++) {
+            if (m.Mtrx[i][m.Col-1] < 0) {
+                System.out.printf("- %6.4fx^%d ", Math.abs(m.Mtrx[i][m.Col-1]), i);
+            } 
+            else if (m.Mtrx[i][m.Col-1] > 0) {
+                System.out.printf("+ %6.4fx^%d ", m.Mtrx[i][m.Col-1], i);
+            }
+        }
+        System.out.println();
+        float x,y;
+        y = m.Mtrx[0][m.Col-1];
+        System.out.println("\nMasukkan nilai x yang akan ditafsir nilai fungsinya: ");
+        for(i = 1; i <= n_factor; i++){
+            x = taksiran[i=1];
+            y += m.Mtrx[i][m.Col-1] * x;
+        }
+        System.out.println("Nilai taksirannya adalah: ");
+        System.out.printf("\nY = %6.4f", y);
+
+        File file = new File("../test/output.txt");
+        PrintStream stream = new PrintStream(file);
+        System.setOut(stream);
+        System.out.printf("\nModel Regresi Linear Berganda adalah:\n");
+        System.out.printf("Y = %6.4f ", newMatrix.elemen[0][newMatrix.kolom-1]);
+        for (i = 1; i < newMatrix.baris ; i++) {
+            if (newMatrix.elemen[i][newMatrix.kolom-1] > 0) {
+                System.out.printf("+ %6.4fx^%d ", newMatrix.elemen[i][newMatrix.kolom-1], i);
+            } else {
+                if (newMatrix.elemen[i][newMatrix.kolom-1] < 0) {
+                    System.out.printf("- %6.4fx^%d ", Math.abs(newMatrix.elemen[i][newMatrix.kolom-1]), i);
+                }
+            }
+        }
+        System.out.print("Nilai taksirannya adalah: ");
+        System.out.printf("\nY = %6.4f", y);
+    }
 }
-
-
