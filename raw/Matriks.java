@@ -688,6 +688,49 @@ public class Matriks {
             e.printStackTrace();
         }
     } */
+    void findsplwithGauss(){
+        this.elimGauss();
+        boolean noSol = false;
+        boolean multSol = false;
+        if (this.Mtrx[this.Row-1][this.Col-1] != 0) {
+            noSol = true;
+            for (int i=0; i < this.Col-2; i++) {
+                if (this.Mtrx[this.Row-1][i] == 0d) {
+                    noSol = false;
+                }
+            }
+        }
+        else {
+            multSol = true;
+            for (int j=0; j < this.Col-2; j++){
+                if (this.Mtrx[this.Row-1][j] != 0d) {
+                    multSol = false;
+                }
+            }
+        }
+        if (noSol) {
+            System.out.printf("SPL tidak memiliki solusi");
+        }
+        else if (multSol) {
+            System.out.printf("SPL memiliki banyak solusi");
+        }
+        else {
+            System.out.printf("SPL memiliki solusi unik");
+            double sol[] =  new double[this.Col-1];
+            for (int k = this.Col-2; k >= 0; k--){
+                sol[k] = this.Mtrx[k][this.Col-1];
+                for (int l = k+1; l < this.Col-1; l++){
+                    sol[k] -= this.Mtrx[k][l]*sol[l];
+                }
+                sol[k] /= this.Mtrx[k][k];
+            }
+            System.out.printf("Solusi adalah:");
+            for (int i = 0; i < this.Col-1; i++)
+            {
+              System.out.printf("%.2f", sol[i]);
+            }
+        }
+    }
 }
 
 
