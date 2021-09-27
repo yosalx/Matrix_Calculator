@@ -696,7 +696,7 @@ public class Matriks {
         this.elimGauss();
         boolean noSol = false;
         boolean multSol = false;
-        if (this.Mtrx[this.Row-1][this.Col-1] != 0) {
+        if (this.Mtrx[this.Row-1][this.Col-1] != 0d) {
             noSol = true;
             for (int i=0; i < this.Col-2; i++) {
                 if (this.Mtrx[this.Row-1][i] == 0d) {
