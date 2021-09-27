@@ -3,37 +3,37 @@ package Tubes1.matriksgeming.raw;
 import java.util.*;
 import java.io.*;
 
-class Matriks {
-    int RowMin = 0, RowMax = 100;
-    int ColMin = 0, ColMax = 100;
-    int Row, Col, countSwap;
-    double saveDividers = 1;
-    double[][] Mtrx;
+public class Matriks {
+    public int RowMin = 0, RowMax = 100;
+    public int ColMin = 0, ColMax = 100;
+    public int Row, Col, countSwap;
+    public double saveDividers = 1;
+    public double[][] Mtrx;
     Scanner scanner = new Scanner(System.in);
 
-    void createMatriks(int row, int col) {
+    public void createMatriks(int row, int col) {
         this.Row = row;
         this.Col = col;
         Mtrx = new double[row][col];
     }
 
-    int getFirstIdxRow() {
+    public int getFirstIdxRow() {
         return RowMin;
     }
 
-    int getFirstIdxCol() {
+    public int getFirstIdxCol() {
         return ColMin;
     }
 
-    int getLastIdxRow() {
+    public int getLastIdxRow() {
         return this.Row - 1;
     }
 
-    int getLastIdxCol() {
+    public int getLastIdxCol() {
         return this.Col - 1;
     }
 
-    int countElmt() {
+    public int countElmt() {
         return this.Row * this.Col;
     }
 
@@ -41,7 +41,7 @@ class Matriks {
         return this.Mtrx[row][col];
     }
 
-    void readMatrix() {
+    public void readMatrix() {
         int i, j;
         for (i = 0; i < this.Row; i++) {
             for (j = 0; j < this.Col; j++) {
@@ -50,7 +50,7 @@ class Matriks {
         }
     }
 
-    void writeMatrix() {
+    public void writeMatrix() {
         int i, j;
         for (i = 0; i < this.Row; i++) {
             for (j = 0; j < this.Col; j++) {
@@ -60,11 +60,11 @@ class Matriks {
         }    
     }
     
-    boolean isSquare() {
+    public boolean isSquare() {
         return (this.Row == this.Col);
     }
 
-    boolean isIdentity(Matriks m) {
+    public boolean isIdentity(Matriks m) {
         int i, j;
         boolean ident = true;
         for (i = 0; i < this.Row; i++) {
@@ -80,11 +80,11 @@ class Matriks {
         return ident;
     }
 
-    boolean isZero(int row, int col) {
+    public boolean isZero(int row, int col) {
         return this.Mtrx[row][col] == 0;
     }
 
-    boolean isBelowRowZero(int row, int col) {
+    public boolean isBelowRowZero(int row, int col) {
         int i;
         if (row + 1 >= this.Row) {
             return true;
@@ -97,7 +97,7 @@ class Matriks {
         return true;
     }
 
-    void Swap(int row1, int row2) {
+    public void Swap(int row1, int row2) {
         double temp;
         for (int j = 0; j < this.Col; j++) {
             temp = this.Mtrx[row2][j];
@@ -106,7 +106,7 @@ class Matriks {
         }
     }
 
-    void swapZero(int row, int col) {
+    public void swapZero(int row, int col) {
         int i, count;
         count = 0;
         for (i = row + 1; i < this.Row; i++) {
@@ -119,32 +119,32 @@ class Matriks {
         this.countSwap = count;
     }
 
-    void multiplyRow(int row, double x) {
+    public void multiplyRow(int row, double x) {
         int j;
         for (j = 0; j < this.Col; j++) {
             Mtrx[row][j] = x*Mtrx[row][j];
         }
     }
 
-    void multiplyCol(int col, double x) {
+    public void multiplyCol(int col, double x) {
         int i;
         for (i = 0; i < this.Row; i++) {
             Mtrx[i][col] = x*Mtrx[i][col];
         }
     }
 
-    void plusRow(int row1, int row2, double x) {
+    public void plusRow(int row1, int row2, double x) {
         int j;
         for (j = 0; j < this.Col; j++) {
             Mtrx[row1][j] += x*Mtrx[row2][j];
         }
     }
 
-    void minusRow(int row1, int row2, double x) {
+    public void minusRow(int row1, int row2, double x) {
         plusRow(row1, row2, -x);
     }
 
-    void transpose(){
+    public void transpose(){
         for (int i = 0; i < this.Row; i++){
             for (int j = 0; j < i; j++){
                 double temp;
@@ -155,7 +155,7 @@ class Matriks {
         }
     } 
 
-    void elimGauss() {
+    public void elimGauss() {
         int i, j;
         double multiply, divide;
         int zeroCol = 0;
@@ -194,7 +194,7 @@ class Matriks {
         }
     }
 
-    void elimGaussJordan() {
+    public void elimGaussJordan() {
         int i, j;
         double multiply, divide;
         int zeroCol = 0;
@@ -236,11 +236,11 @@ class Matriks {
         }
     }
 
-    void getDeterminantOBE(){
+    public void getDeterminantOBE(){
         System.out.println(this.determinantOBE());
     }
 
-    double determinantOBE() {
+    public double determinantOBE() {
         double determinant = 1;
         elimGauss();
         for (int i = 0; i < this.Row; i++) {
@@ -253,7 +253,7 @@ class Matriks {
         return determinant;
     }
 
-    void getDeterminantC(Matriks m) {
+    public void getDeterminantC(Matriks m) {
         Matriks sub;
         for (int i = 0; i < this.Row; i++) {
             for (int j = 0; j < this.Col; j++) {
@@ -270,7 +270,7 @@ class Matriks {
     }
 
 
-    Matriks cofactor(Matriks m){
+    public Matriks cofactor(Matriks m){
         Matriks sub;
         for (int i = 0; i < this.Row; i++) {
             for (int j = 0; j < this.Col; j++) {
@@ -281,7 +281,7 @@ class Matriks {
         return m;
     }
 
-    Matriks subMatriks(int i, int j) {
+    public Matriks subMatriks(int i, int j) {
 
         Matriks m = new Matriks();
         m.createMatriks(this.Row - 1, this.Col - 1); 
@@ -301,7 +301,7 @@ class Matriks {
         return m;
     }
 
-    void kaidah_crammer () {
+    public void kaidah_crammer () {
         double det;
         double subdet;
         Matriks m1 = new Matriks();
@@ -345,7 +345,7 @@ class Matriks {
     }
 
 
-    void readMatrixfromFile() throws IOException {
+    public void readMatrixfromFile() throws IOException {
         BufferedReader input = new BufferedReader(new FileReader("tes.txt"));
         String data = input.readLine();
 
@@ -359,7 +359,7 @@ class Matriks {
         }
     }
 
-    void polynomRead() {
+    public void polynomRead() {
         double an[];
         double bn[];
         an = new double[this.Col];
@@ -385,7 +385,7 @@ class Matriks {
         }
     }
 
-    void adjoint_invers(){
+    public void adjoint_invers(){
         Matriks n = new Matriks();
         Matriks o = new Matriks();
 
@@ -415,7 +415,7 @@ class Matriks {
         System.out.println("\n");
     }
 
-    void inversGaussWrite() {
+    public void inversGaussWrite() {
         Matriks inv = new Matriks();
         inv.createMatriks(this.Row, this.Col);
         int i, j;
@@ -504,7 +504,7 @@ class Matriks {
         }
     }
 
-    Matriks inversGauss() {
+    public Matriks inversGauss() {
         Matriks inv = new Matriks();
         inv.createMatriks(this.Row, this.Col);
         int i, j;
@@ -591,7 +591,7 @@ class Matriks {
         return inv;
     }
 
-    void polynomInterpolate(boolean toFile) throws IOException {
+    public void polynomInterpolate(boolean toFile) throws IOException {
         double keepPoint[];
         keepPoint = new double[this.Col - 1];
         int i, j;
@@ -645,7 +645,7 @@ class Matriks {
         }*/
     }
 
-    void findSPLwithInv() {
+    public void findSPLwithInv() {
         Matriks matPers = new Matriks();
         Matriks colHasil = new Matriks();
         double solution[] = new double[this.Row];
