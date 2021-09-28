@@ -53,6 +53,46 @@ public class Matriks {
             }
         }
     }
+    
+    public void polynomRead() {
+        double an[];
+        double bn[];
+        an = new double[this.Col];
+        bn = new double[this.Col];
+        int i, j;
+        j = 0;
+
+        for (i = 0; i < this.Row; i++) {
+            this.Mtrx[i][j] = 1;
+        }
+
+        for (i = 0; i < this.Row; i++) {
+            System.out.printf("Masukkan nilai untuk titik ke-%d : ", i + 1);
+            an[i] = scanner.nextDouble();
+            bn[i] = scanner.nextDouble();
+            for (j = 1; j < this.Col - 1; j++) {
+                this.Mtrx[i][j] = (double) Math.pow(an[i], j);
+            }
+        }
+        // this.elimGaussJordan();
+        for (i = 0; i < this.Row; i++) {
+            this.Mtrx[i][this.Col - 1] = bn[i];
+        }
+    }
+    
+    public void readMatrixfromFile() throws IOException {
+        BufferedReader input = new BufferedReader(new FileReader("tes.txt"));
+        String data = input.readLine();
+
+        int i, j;
+        for (i = 0; i < this.Row; i++) {
+            StringTokenizer string = new StringTokenizer(data, " ");
+            for (j = 0; j < this.Col; j++) {
+                this.Mtrx[i][j] = Double.valueOf(string.nextToken()).doubleValue();
+            }
+            data = input.readLine();
+        }
+    }
 
     public void writeMatrix() {
         int i, j;
@@ -126,21 +166,28 @@ public class Matriks {
     public void multiplyRow(int row, double x) {
         int j;
         for (j = 0; j < this.Col; j++) {
-            Mtrx[row][j] = x*Mtrx[row][j];
+            this.Mtrx[row][j] = x*getElmt(row, j);
         }
     }
 
     public void multiplyCol(int col, double x) {
         int i;
         for (i = 0; i < this.Row; i++) {
-            Mtrx[i][col] = x*Mtrx[i][col];
+            this.Mtrx[i][col] = x*getElmt(i, col);
+        }
+    }
+
+    public void divideRow(int row, double x) {
+        int j;
+        for (j = 0; j < this.Col; j++) {
+            this.Mtrx[row][j] = getElmt(row, j)/x;
         }
     }
 
     public void plusRow(int row1, int row2, double x) {
         int j;
         for (j = 0; j < this.Col; j++) {
-            Mtrx[row1][j] += x*Mtrx[row2][j];
+            this.Mtrx[row1][j] += x*getElmt(row2, j);
         }
     }
 
@@ -182,7 +229,7 @@ public class Matriks {
             divide = getElmt(i, j);
             while (divide == 0) {
                 j++;
-                divide = this.Mtrx[i][j];
+                divide = getElmt(i, j);
             }
             this.saveDividers *= divide;
             int k;
@@ -190,9 +237,9 @@ public class Matriks {
                 this.Mtrx[i][k] /= divide;
             }
             for (k = i+1; k < this.Row; k++) {
-                multiply = this.Mtrx[k][j];
+                multiply = getElmt(k, j);
                 for (int subj = j; subj < this.Col; subj++) {
-                    this.Mtrx[k][subj] -= this.Mtrx[i][subj]*multiply;
+                    this.Mtrx[k][subj] -= getElmt(i, subj)*multiply;
                 }
             }
         }
@@ -202,7 +249,7 @@ public class Matriks {
         int i, j;
         double multiply, divide;
         int zeroCol = 0;
-        for (i = 0; i < this.Row; i++) {
+        for (i = RowMin; i < this.Row; i++) {
             for (j = i+zeroCol; j < this.Col; j++) {
                 if (isZero(i, j)) {
                     if (isBelowRowZero(i, j)) {
@@ -218,37 +265,33 @@ public class Matriks {
             if (j >= this.Col) {
                 break;
             }
-            divide = this.Mtrx[i][j];
+            divide = getElmt(i, j);
             while (divide == 0) {
                 j++;
-                divide = this.Mtrx[i][j];
+                divide = getElmt(i, j);
             }
             int k;
             for (k = j; k < this.Col; k++) {
                 this.Mtrx[i][k] /= divide;
             }
-            for (k = 0; k < this.Row; k++) {
+            for (k = RowMin; k < this.Row; k++) {
                 if (k == i) {
                     continue;
                 } else {
-                    multiply = this.Mtrx[k][j];
+                    multiply = getElmt(k, j);
                     for (int subj = j; subj < this.Col; subj++) {
-                        this.Mtrx[k][subj] -= this.Mtrx[i][subj]*multiply;
+                        this.Mtrx[k][subj] -= getElmt(i, subj)*multiply;
                     } 
                 }
             }
         }
     }
 
-    public void getDeterminantOBE(){
-        System.out.println(this.determinantOBE());
-    }
-
     public double determinantOBE() {
         double determinant = 1;
         elimGauss();
-        for (int i = 0; i < this.Row; i++) {
-            determinant *= this.Mtrx[i][i];
+        for (int i = RowMin; i < this.Row; i++) {
+            determinant *= getElmt(i, i);
         }
         if (this.countSwap % 2 == 1) {
             determinant = -(determinant);
@@ -256,48 +299,23 @@ public class Matriks {
         determinant *= this.saveDividers;
         return determinant;
     }
-
-    public void getDeterminantC(Matriks m) {
-        Matriks sub;
-        for (int i = 0; i < this.Row; i++) {
-            for (int j = 0; j < this.Col; j++) {
-                sub = subMatriks(i, j);
-                m.Mtrx[i][j] = (double) (Math.pow(-1, i + j) * sub.determinantOBE());
-            }
-        }
-        double det = 0;
-        int i = 0;
-        for (int j = 0; j < this.Col; j++) {
-            det += this.Mtrx[i][j] * m.Mtrx[i][j];
-        }
-        System.out.printf("Determinan adalah %.2f ", det);
+    
+    public void getDeterminantOBE(){
+        System.out.println(this.determinantOBE());
     }
-
-
-    public Matriks cofactor(Matriks m){
-        Matriks sub;
-        for (int i = 0; i < this.Row; i++) {
-            for (int j = 0; j < this.Col; j++) {
-                sub = subMatriks(i, j);
-                m.Mtrx[i][j] = (double) (Math.pow(-1, i + j) * sub.determinantOBE());
-            }
-        }
-        return m;
-    }
-
+    
     public Matriks subMatriks(int i, int j) {
-
         Matriks m = new Matriks();
         m.createMatriks(this.Row - 1, this.Col - 1); 
 
-        int p =0, q=0;
-        for (int row=0; row < this.Row; row++) {
+        int p = 0, q = 0;
+        for (int row = RowMin; row < this.Row; row++) {
             if(row == i) continue; 
-            for (int col=0; col < this.Col; col++) {
+            for (int col = ColMin; col < this.Col; col++) {
                 if(col == j) continue;
-                m.Mtrx[p][q] = this.Mtrx[row][col];
-                q = (q+1)%(this.Row -1);
-                if(q==0) {
+                m.Mtrx[p][q] = getElmt(row, col);
+                q = (q + 1)%(this.Row - 1);
+                if(q == 0) {
                     p++;
                 }
             }
@@ -305,34 +323,62 @@ public class Matriks {
         return m;
     }
 
-    public void kaidah_crammer () {
+    public void getDeterminantC(Matriks m) {
+        Matriks sub;
+        for (int i = RowMin; i < this.Row; i++) {
+            for (int j = ColMin; j < this.Col; j++) {
+                sub = subMatriks(i, j);
+                m.Mtrx[i][j] = (double) (Math.pow(-1, i + j) * sub.determinantOBE());
+            }
+        }
+        double det = 0;
+        int i = 0;
+        for (int j = ColMin; j < this.Col; j++) {
+            det += getElmt(i, j) * m.Mtrx[i][j];
+        }
+        System.out.printf("Determinan adalah %.2f ", det);
+    }
+
+    public Matriks cofactor(Matriks m){
+        Matriks sub;
+        for (int i = RowMin; i < this.Row; i++) {
+            for (int j = ColMin; j < this.Col; j++) {
+                sub = subMatriks(i, j);
+                m.Mtrx[i][j] = (double) (Math.pow(-1, i + j) * sub.determinantOBE());
+            }
+        }
+        return m;
+    }
+
+    public void kaidah_crammer() {
         double det;
         double subdet;
         Matriks m1 = new Matriks();
         Matriks m2 = new Matriks();
 
         m1.createMatriks(this.Row, this.Col-1);
-        for (int i = 0; i < this.Row; i++) {
-            for (int j = 0; j < this.Col-1; j++) {
-                m1.Mtrx[i][j] = this.Mtrx[i][j];
+        for (int i = RowMin; i < this.Row; i++) {
+            for (int j = ColMin; j < this.Col-1; j++) {
+                m1.Mtrx[i][j] = getElmt(i, j);
             }
         }
         m2.createMatriks(this.Row, 1);
-        for (int k = 0; k < this.Row; k++) {
-            m2.Mtrx[k][0] = this.Mtrx[k][this.Col-1];
+        for (int k = RowMin; k < this.Row; k++) {
+            m2.Mtrx[k][0] = getElmt(k, this.Col-1);
         }
+
         det = determinantOBE();
         if (det == 0) {
-            System.out.printf("determinan = 0, tidak bisa digunakan kaidah cramer");
+            System.out.printf("Determinan = 0, tidak bisa digunakan kaidah cramer");
         }
         else {
             double sol;
-            for (int a = 0; a < this.Col-1; a++) {
+            for (int a = ColMin; a < this.Col-1; a++) {
                 Matriks submatrix = new Matriks();
                 submatrix.createMatriks(this.Row, this.Col-1);
-                for (int b = 0; b < this.Col-1; b++) {
-                    for (int c = 0; c < this.Row; c++) {
-                        if (a==b) {
+                for (int b = ColMin; b < this.Col-1; b++) {
+                    for (int c = RowMin; c < this.Row; c++) {
+                        if (a == b) {
                             submatrix.Mtrx[c][b] = m2.Mtrx[c][0];
                         }
                         else {
@@ -345,47 +391,6 @@ public class Matriks {
                 System.out.printf("solusi X%d = ", a+1);
                 System.out.printf("%.2f ", sol);
             }
-        }
-    }
-
-
-    public void readMatrixfromFile() throws IOException {
-        BufferedReader input = new BufferedReader(new FileReader("tes.txt"));
-        String data = input.readLine();
-
-        int i, j;
-        for (i = 0; i < this.Row; i++) {
-            StringTokenizer string = new StringTokenizer(data, " ");
-            for (j = 0; j < this.Col; j++) {
-                this.Mtrx[i][j] = Double.valueOf(string.nextToken()).doubleValue();
-            }
-            data = input.readLine();
-        }
-    }
-
-    public void polynomRead() {
-        double an[];
-        double bn[];
-        an = new double[this.Col];
-        bn = new double[this.Col];
-        int i, j;
-        j = 0;
-
-        for (i = 0; i < this.Row; i++) {
-            this.Mtrx[i][j] = 1;
-        }
-
-        for (i = 0; i < this.Row; i++) {
-            System.out.printf("Masukkan nilai untuk titik ke-%d : ", i + 1);
-            an[i] = scanner.nextDouble();
-            bn[i] = scanner.nextDouble();
-            for (j = 1; j < this.Col - 1; j++) {
-                this.Mtrx[i][j] = (double) Math.pow(an[i], j);
-            }
-        }
-        // this.elimGaussJordan();
-        for (i = 0; i < this.Row; i++) {
-            this.Mtrx[i][this.Col - 1] = bn[i];
         }
     }
 
@@ -409,12 +414,12 @@ public class Matriks {
         double det;
         det = this.determinantOBE();
 
-        for(int i=0; i<this.Row;i++){
-            for(int j=0; j<this.Col;j++){
+        for(int i = RowMin; i < this.Row;i++){
+            for(int j = ColMin; j < this.Col; j++){
                 o.Mtrx[i][j] = ((1/det)*(o.Mtrx[i][j]));
             }
         }
-        System.out.println("Sehinnga balikan dari matriks tersebut adalah: \n");
+        System.out.println("Sehingga balikan dari matriks tersebut adalah: \n");
         o.writeMatrix();
         System.out.println("\n");
     }
@@ -423,12 +428,12 @@ public class Matriks {
         Matriks inv = new Matriks();
         inv.createMatriks(this.Row, this.Col);
         int i, j;
-        for (i = 0; i < this.Row; i++) {
+        for (i = RowMin; i < this.Row; i++) {
             inv.Mtrx[i][i] = 1;
         }
         double divide, multiply;
         int zeroCol = 0;
-        for (i = 0; i < this.Row; i++) {
+        for (i = RowMin; i < this.Row; i++) {
             for (j = i + zeroCol; j < this.Col; j++) {
                 if (isZero(i, i+zeroCol)) {
                     if (isBelowRowZero(i, i)) {
@@ -439,8 +444,8 @@ public class Matriks {
                             if (!isZero(a, i)) {
                                 double temp;
                                 for (j = 0; j < this.Col; j++) {
-                                    temp = this.Mtrx[a][j];
-                                    this.Mtrx[a][j] = this.Mtrx[i][j];
+                                    temp = getElmt(a, j);
+                                    this.Mtrx[a][j] = getElmt(i, j);
                                     this.Mtrx[i][j] = temp;
                                     temp = inv.Mtrx[a][j];
                                     inv.Mtrx[a][j] = inv.Mtrx[i][j];
@@ -459,10 +464,10 @@ public class Matriks {
             if (j >= this.Col) {
                 break;
             }
-            divide = this.Mtrx[i][j];
+            divide = getElmt(i, j);
             while (divide == 0) {
                 j++;
-                divide = this.Mtrx[i][j];
+                divide = getElmt(i, j);
             }
             int k;
             for (k = j; k < this.Col; k++) {
@@ -472,27 +477,27 @@ public class Matriks {
                 inv.Mtrx[i][k] /= divide;
             }
             for (k = i+1; k < this.Row; k++) {
-                multiply = this.Mtrx[k][j];
+                multiply = getElmt(k, j);
                 int subj;
                 for (subj = j; subj < this.Col; subj++) {
-                    this.Mtrx[k][subj] -= multiply*this.Mtrx[i][subj];
+                    this.Mtrx[k][subj] -= multiply*getElmt(i,subj);
                 }
-                for (subj = 0; subj < this.Col; subj++) {
+                for (subj = ColMin; subj < this.Col; subj++) {
                     inv.Mtrx[k][subj] -= multiply*inv.Mtrx[i][subj];
                 }
             } 
         }
-        for (i = 0; i < this.Row; i++) {
+        for (i = RowMin; i < this.Row; i++) {
             for (j = i; j < this.Col; j++) {
-                if (this.Mtrx[i][j] == 1) {
+                if (getElmt(i, j) == 1) {
                     int k;
                     for (k = 0; k < i; k++) {
                         if (!isZero(k, j)) {
-                            multiply = this.Mtrx[k][j];
+                            multiply = getElmt(k, j);
                             for (int subj = j; subj < this.Col; subj++) {
-                                this.Mtrx[k][subj] -= this.Mtrx[i][subj]*multiply;
+                                this.Mtrx[k][subj] -= getElmt(i, subj)*multiply;
                             }
-                            for (int subj = 0; subj < this.Col; subj++) {
+                            for (int subj = ColMin; subj < this.Col; subj++) {
                                 inv.Mtrx[k][subj] -= inv.Mtrx[i][subj]*multiply;
                             }
                         }
@@ -508,7 +513,7 @@ public class Matriks {
         }
     }
 
-    public Matriks inversGauss() {
+    /*public Matriks inversGauss() {
         Matriks inv = new Matriks();
         inv.createMatriks(this.Row, this.Col);
         int i, j;
@@ -593,6 +598,36 @@ public class Matriks {
             System.out.println("Matriks tidak mempunyai invers");
         }
         return inv;
+    }*/
+    
+    public void findSPLwithInv() {
+        Matriks matPers = new Matriks();
+        Matriks colHasil = new Matriks();
+        double solution[] = new double[this.Row];
+        int i, j;
+
+        matPers.createMatriks(this.Row, this.Col - 1);
+        colHasil.createMatriks(this.Row, 1);
+        for (i = RowMin; i < this.Row; i++) {
+            for (j = ColMin; j < this.Col - 1; j++) {
+                matPers.Mtrx[i][j] = getElmt(i, j);
+            }
+        }
+        for (i = RowMin; i < this.Row; i++) {
+            colHasil.Mtrx[i][0] = getElmt(i, this.Col-1);
+        }
+
+        matPers.inversGaussWrite();
+        for (i = RowMin; i < this.Row; i++) {
+            for (j = ColMin; j < this.Col - 1; j++) {
+                solution[i] += matPers.Mtrx[i][j]*colHasil.Mtrx[j][0]; 
+            }
+        }
+        //matPers.writeMatrix();
+        //colHasil.writeMatrix();
+        for (i = RowMin; i < this.Row; i++) {
+            System.out.printf("x%d = %.5f ", i + 1, solution[i]);
+        }
     }
 
     public void polynomInterpolate(boolean toFile) throws IOException {
@@ -601,10 +636,10 @@ public class Matriks {
         int i, j;
         int zeroCol = 0;
         this.elimGaussJordan();
-        for (i = 0; i < this.Row; i++) {
+        for (i = RowMin; i < this.Row; i++) {
             for (j = i + zeroCol; j < this.Col - 1; j++) {
-                if (this.Mtrx[i][j] == 1) {
-                    keepPoint[j] = this.Mtrx[i][this.Col - 1];
+                if (getElmt(i, j) == 1) {
+                    keepPoint[j] = getElmt(i, this.Col-1);
                     break;
                 }
                 else {
@@ -612,7 +647,7 @@ public class Matriks {
                 }
             }
         }
-        System.out.println("Persamaan akhir dari interpolasi adalah");
+        System.out.println("Persamaan dari interpolasi adalah");
         System.out.printf("P(x) = %.5f ", keepPoint[0]);
         for (i = 1; i < this.Col - 1; i++) {
             if (keepPoint[i] > 0) {
@@ -649,36 +684,6 @@ public class Matriks {
         }*/
     }
 
-    public void findSPLwithInv() {
-        Matriks matPers = new Matriks();
-        Matriks colHasil = new Matriks();
-        double solution[] = new double[this.Row];
-        int i, j;
-
-        matPers.createMatriks(this.Row, this.Col - 1);
-        colHasil.createMatriks(this.Row, 1);
-        for (i = 0; i < this.Row; i++) {
-            for (j = 0; j < this.Col - 1; j++) {
-                matPers.Mtrx[i][j] = this.Mtrx[i][j];
-            }
-        }
-        for (i = 0; i < this.Row; i++) {
-            colHasil.Mtrx[i][0] = this.Mtrx[i][this.Col - 1];
-        }
-
-        matPers.inversGaussWrite();
-        for (i = 0; i < this.Row; i++) {
-            for (j = 0; j < this.Col - 1; j++) {
-                solution[i] += matPers.Mtrx[i][j]*colHasil.Mtrx[j][0]; 
-            }
-        }
-        //matPers.writeMatrix();
-        //colHasil.writeMatrix();
-        for (i = 0; i < this.Row; i++) {
-            System.out.printf("x%d = %.5f ", i + 1, solution[i]);
-        }
-    }
-
     /*void printToFile() {
         try {
             FileWriter w = new FileWriter(new PrintWriter("output.txt"));
@@ -692,6 +697,7 @@ public class Matriks {
             e.printStackTrace();
         }
     } */
+
     void findsplwithGauss(){
         this.elimGauss();
         boolean noSol = false;
@@ -736,77 +742,151 @@ public class Matriks {
         }
     }
 
+    /*void double_regression(int n_factor){
+         Matriks m = new Matriks();
+         m.createMatriks(this.Col, this.Col+1);
+         int row, col;
+         for(row = 0; row < m.Row; row++){
+             for(col = 0; col < m.Col; col++){
+                 if(row == 0 && col == 0){
+                     m.Mtrx[row][col] = this.Row;
+                 }
+                 else if((row == 0 && col != 0)){
+                     m.Mtrx[row][col] = 0;
+                     int sec_row;
+                     for(sec_row = 0; sec_row < this.Row; sec_row++){
+                         m.Mtrx[row][col] += this.Mtrx[sec_row][col-1];
+                     }
+                 }
+                 else if((row != 0 && col == 0)){
+                     m.Mtrx[row][col] = 0;
+                     int sec_row;
+                     for(sec_row = 0; sec_row < this.Row; sec_row++){
+                         m.Mtrx[row][col] += this.Mtrx[sec_row][row-1];
+                     }
+                 }
+                 else{
+                     m.Mtrx[row][col] = 0;
+                     int sec_row;
+                     for(sec_row = 0; sec_row < this.Row; sec_row++){
+                         m.Mtrx[row][col] += this.Mtrx[sec_row][row-1] * this.Mtrx[sec_row][col-1];
+                     }
+                 }
 
-    void double_regression(int n_factor){
-        Matriks m = new Matriks();
-        m.createMatriks(this.Col, this.Col+1);
-        int row, col;
-        for(row = 0; row < m.Row; row++){
-            for(col = 0; col < m.Col; col++){
-                if(row == 0 && col == 0){
-                    m.Mtrx[row][col] = this.Row;
-                }
-                else if((row == 0 && col != 0)){
-                    m.Mtrx[row][col] = 0;
-                    int sec_row;
-                    for(sec_row = 0; sec_row < this.Row; sec_row++){
-                        m.Mtrx[row][col] += this.Mtrx[sec_row][col-1];
-                    }
-                }
-                else if((row != 0 && col == 0)){
-                    m.Mtrx[row][col] = 0;
-                    int sec_row;
-                    for(sec_row = 0; sec_row < this.Row; sec_row++){
-                        m.Mtrx[row][col] += this.Mtrx[sec_row][row-1];
-                    }
-                }
-                else{
-                    m.Mtrx[row][col] = 0;
-                    int sec_row;
-                    for(sec_row = 0; sec_row < this.Row; sec_row++){
-                        m.Mtrx[row][col] += this.Mtrx[sec_row][row-1] * this.Mtrx[sec_row][col-1];
-                    }
-                }
+             }
+         }
+         m.elimGaussJordan();
+         System.out.printf("\nModel Regresi Linear Berganda dari persamaan yang diberikan adalah: Y = %6.4f", m.Mtrx[0][m.Col-1]);
+         int i;
+         for (i = 1; i < m.Row ; i++) {
+             if (m.Mtrx[i][m.Col-1] < 0) {
+                 System.out.printf("- %6.4fx^%d ", Math.abs(m.Mtrx[i][m.Col-1]), i);
+             } 
+             else if (m.Mtrx[i][m.Col-1] > 0) {
+                 System.out.printf("+ %6.4fx^%d ", m.Mtrx[i][m.Col-1], i);
+             }
+         }
+         System.out.println();
+         float x,y;
+         y = m.Mtrx[0][m.Col-1];
+         System.out.println("\nMasukkan nilai x yang akan ditafsir nilai fungsinya: ");
+         for(i = 1; i <= n_factor; i++){
+             x = taksiran[i=1];
+             y += m.Mtrx[i][m.Col-1] * x;
+         }
+         System.out.println("Nilai taksirannya adalah: ");
+         System.out.printf("\nY = %6.4f", y);
 
-            }
-        }
-        m.elimGaussJordan();
-        System.out.printf("\nModel Regresi Linear Berganda dari persamaan yang diberikan adalah: Y = %6.4f", m.Mtrx[0][m.Col-1]);
-        int i;
-        for (i = 1; i < m.Row ; i++) {
-            if (m.Mtrx[i][m.Col-1] < 0) {
-                System.out.printf("- %6.4fx^%d ", Math.abs(m.Mtrx[i][m.Col-1]), i);
-            } 
-            else if (m.Mtrx[i][m.Col-1] > 0) {
-                System.out.printf("+ %6.4fx^%d ", m.Mtrx[i][m.Col-1], i);
-            }
-        }
-        System.out.println();
-        float x,y;
-        y = m.Mtrx[0][m.Col-1];
-        System.out.println("\nMasukkan nilai x yang akan ditafsir nilai fungsinya: ");
-        for(i = 1; i <= n_factor; i++){
-            x = taksiran[i=1];
-            y += m.Mtrx[i][m.Col-1] * x;
-        }
-        System.out.println("Nilai taksirannya adalah: ");
-        System.out.printf("\nY = %6.4f", y);
+         File file = new File("../test/output.txt");
+         PrintStream stream = new PrintStream(file);
+         System.setOut(stream);
+         System.out.printf("\nModel Regresi Linear Berganda adalah:\n");
+         System.out.printf("Y = %6.4f ", newMatrix.elemen[0][newMatrix.kolom-1]);
+         for (i = 1; i < newMatrix.baris ; i++) {
+             if (newMatrix.elemen[i][newMatrix.kolom-1] > 0) {
+                 System.out.printf("+ %6.4fx^%d ", newMatrix.elemen[i][newMatrix.kolom-1], i);
+             } else {
+                 if (newMatrix.elemen[i][newMatrix.kolom-1] < 0) {
+                     System.out.printf("- %6.4fx^%d ", Math.abs(newMatrix.elemen[i][newMatrix.kolom-1]), i);
+                 }
+             }
+         }
+         System.out.print("Nilai taksirannya adalah: ");
+         System.out.printf("\nY = %6.4f", y);
+     }*/
 
-        File file = new File("../test/output.txt");
-        PrintStream stream = new PrintStream(file);
-        System.setOut(stream);
-        System.out.printf("\nModel Regresi Linear Berganda adalah:\n");
-        System.out.printf("Y = %6.4f ", newMatrix.elemen[0][newMatrix.kolom-1]);
-        for (i = 1; i < newMatrix.baris ; i++) {
-            if (newMatrix.elemen[i][newMatrix.kolom-1] > 0) {
-                System.out.printf("+ %6.4fx^%d ", newMatrix.elemen[i][newMatrix.kolom-1], i);
-            } else {
-                if (newMatrix.elemen[i][newMatrix.kolom-1] < 0) {
-                    System.out.printf("- %6.4fx^%d ", Math.abs(newMatrix.elemen[i][newMatrix.kolom-1]), i);
-                }
-            }
-        }
-        System.out.print("Nilai taksirannya adalah: ");
-        System.out.printf("\nY = %6.4f", y);
-    }
+     /*void double_regression(int n_factor){
+         Matriks m = new Matriks();
+         m.createMatriks(this.Col, this.Col+1);
+         int row, col;
+         for(row = 0; row < m.Row; row++){
+             for(col = 0; col < m.Col; col++){
+                 if(row == 0 && col == 0){
+                     m.Mtrx[row][col] = this.Row;
+                 }
+                 else if((row == 0 && col != 0)){
+                     m.Mtrx[row][col] = 0;
+                     int sec_row;
+                     for(sec_row = 0; sec_row < this.Row; sec_row++){
+                         m.Mtrx[row][col] += this.Mtrx[sec_row][col-1];
+                     }
+                 }
+                 else if((row != 0 && col == 0)){
+                     m.Mtrx[row][col] = 0;
+                     int sec_row;
+                     for(sec_row = 0; sec_row < this.Row; sec_row++){
+                         m.Mtrx[row][col] += this.Mtrx[sec_row][row-1];
+                     }
+                 }
+                 else{
+                     m.Mtrx[row][col] = 0;
+                     int sec_row;
+                     for(sec_row = 0; sec_row < this.Row; sec_row++){
+                         m.Mtrx[row][col] += this.Mtrx[sec_row][row-1] * this.Mtrx[sec_row][col-1];
+                     }
+                 }
+
+             }
+         }
+         m.elimGaussJordan();
+         System.out.printf("\nModel Regresi Linear Berganda dari persamaan yang diberikan adalah: Y = %6.4f", m.Mtrx[0][m.Col-1]);
+         int i;
+         for (i = 1; i < m.Row ; i++) {
+             if (m.Mtrx[i][m.Col-1] < 0) {
+                 System.out.printf("- %6.4fx^%d ", Math.abs(m.Mtrx[i][m.Col-1]), i);
+             } 
+             else if (m.Mtrx[i][m.Col-1] > 0) {
+                 System.out.printf("+ %6.4fx^%d ", m.Mtrx[i][m.Col-1], i);
+             }
+         }
+         System.out.println();
+         float x,y;
+         y = m.Mtrx[0][m.Col-1];
+         System.out.println("\nMasukkan nilai x yang akan ditafsir nilai fungsinya: ");
+         for(i = 1; i <= n_factor; i++){
+             x = taksiran[i=1];
+             y += m.Mtrx[i][m.Col-1] * x;
+         }
+         System.out.println("Nilai taksirannya adalah: ");
+         System.out.printf("\nY = %6.4f", y);
+
+         File file = new File("../test/output.txt");
+         PrintStream stream = new PrintStream(file);
+         System.setOut(stream);
+         System.out.printf("\nModel Regresi Linear Berganda adalah:\n");
+         System.out.printf("Y = %6.4f ", newMatrix.elemen[0][newMatrix.kolom-1]);
+         for (i = 1; i < newMatrix.baris ; i++) {
+             if (newMatrix.elemen[i][newMatrix.kolom-1] > 0) {
+                 System.out.printf("+ %6.4fx^%d ", newMatrix.elemen[i][newMatrix.kolom-1], i);
+             } else {
+                 if (newMatrix.elemen[i][newMatrix.kolom-1] < 0) {
+                     System.out.printf("- %6.4fx^%d ", Math.abs(newMatrix.elemen[i][newMatrix.kolom-1]), i);
+                 }
+             }
+         }
+         System.out.print("Nilai taksirannya adalah: ");
+         System.out.printf("\nY = %6.4f", y);
+     }*/
 }
+
+
