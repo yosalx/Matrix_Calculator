@@ -123,9 +123,9 @@ public class Matriks {
         }    
     }
 
-    public void writeMatrixToFile() {
+    public void writeMatrixInvToFile() {
         try {
-            FileWriter writer = new FileWriter("output.txt");
+            FileWriter writer = new FileWriter("outputInvers.txt");
             int i, j;
             for (i = RowMin; i < this.Row; i++) {
                 for (j = ColMin; j < this.Col; j++) {
@@ -139,7 +139,25 @@ public class Matriks {
             System.out.println("Ada error: ");
             e.printStackTrace();
         }
+    }
 
+    public void writeMatrixDetToFile() {
+        try {
+            FileWriter writer = new FileWriter("outputDeterminan.txt");
+            int i, j;
+            for (i = RowMin; i < this.Row; i++) {
+                for (j = ColMin; j < this.Col; j++) {
+                    writer.write(getElmt(i, j) + " ");
+                }
+                writer.write("\n");
+            }
+            writer.write("Determinan dari matriks tersebut adalah: " + determinantOBE());
+            writer.close();
+            System.out.println("Berhasil dicetak di file");
+        } catch (IOException e) {
+            System.out.println("Ada error: ");
+            e.printStackTrace();
+        }
     }
     
     public boolean isSquare() {
@@ -388,7 +406,7 @@ public class Matriks {
         return m;
     }
 
-    public void kaidah_crammer() {
+    public void kaidah_crammer(boolean toFile) {
         double det;
         double subdet;
         Matriks m1 = new Matriks();
@@ -428,6 +446,46 @@ public class Matriks {
                 sol = (subdet/det);
                 System.out.printf("solusi X%d = ", a+1);
                 System.out.printf("%.2f ", sol);
+            }
+        }
+
+        if (toFile) {
+            try {
+                FileWriter writer = new FileWriter("outputSolusiSPL.txt");
+                int i, j;
+                for (i = RowMin; i < this.Row; i++) {
+                    for (j = ColMin; j < this.Col; j++) {
+                        writer.write(getElmt(i, j) + " ");
+                    }
+                    writer.write("\n");
+                }
+                if (det == 0) {
+                    writer.write("Determinan = 0, tidak bisa digunakan kaidah cramer");
+                } else {
+                    double sol;
+                    for (int a = ColMin; a < this.Col-1; a++) {
+                        Matriks submatrix = new Matriks();
+                        submatrix.createMatriks(this.Row, this.Col-1);
+                        for (int b = ColMin; b < this.Col-1; b++) {
+                            for (int c = RowMin; c < this.Row; c++) {
+                                if (a == b) {
+                                    submatrix.Mtrx[c][b] = m2.Mtrx[c][0];
+                                }
+                                else {
+                                    submatrix.Mtrx[c][b] = m1.Mtrx[c][b];
+                                }
+                            }
+                        }
+                        subdet = submatrix.determinantOBE();
+                        sol = (subdet/det);
+                        writer.write("solusi X" + a+1 + " = " + sol + " ");
+                    }
+                }
+                writer.close();
+                System.out.println("Berhasil dicetak di file");
+            } catch (IOException e) {
+                System.out.println("Ada error: ");
+                e.printStackTrace();
             }
         }
     }
@@ -639,7 +697,7 @@ public class Matriks {
         return inv;
     }*/
     
-    public void findSPLwithInv() {
+    public void findSPLwithInv(boolean toFile) {
         Matriks matPers = new Matriks();
         Matriks colHasil = new Matriks();
         double solution[] = new double[this.Row];
@@ -667,9 +725,30 @@ public class Matriks {
         for (i = RowMin; i < this.Row; i++) {
             System.out.printf("x%d = %.5f ", i + 1, solution[i]);
         }
+
+        if (toFile) {
+            try {
+                FileWriter writer = new FileWriter("outputSolusiSPL.txt");
+                for (i = RowMin; i < this.Row; i++) {
+                    for (j = ColMin; j < this.Col; j++) {
+                        writer.write(getElmt(i, j) + " ");
+                    }
+                    writer.write("\n");
+                }
+                writer.write("Solusi SPL di atas adalah:\n");
+                for (i = RowMin; i < this.Row; i++) {
+                    writer.write("x" + (i+1) + " = " + solution[i] + " "); 
+                }
+                writer.close();
+                System.out.println("Berhasil dicetak di file");
+            } catch (IOException e) {
+                System.out.println("Ada error: ");
+                e.printStackTrace();
+            }
+        }
     }
 
-    public void polynomInterpolate(boolean toFile) throws IOException {
+    public void polynomInterpolate(boolean toFile) {
         double keepPoint[];
         keepPoint = new double[this.Col - 1];
         int i, j;
@@ -721,6 +800,28 @@ public class Matriks {
             }
             System.out.printf("P(%.5f) = %.5f\n", find, result);
         }*/
+
+        if (toFile) {
+            try {
+                FileWriter writer = new FileWriter("outputInterpolate.txt");
+                writer.write("Persamaan dari interpolasi adalah\n");
+                writer.write("P(x) = " + keepPoint[0] + " ");
+                for (i = 1; i < this.Col - 1; i++) {
+                    if (keepPoint[i] > 0) {
+                        writer.write("+ " + keepPoint[i] + "x^" + i + " ");
+                    }
+                    if (keepPoint[i] < 0) {
+                        writer.write("+ (" + keepPoint[i] + "x^" + i + ") ");
+                    }
+                }
+                writer.write("\nP(" + find + ") = " + result);
+                writer.close();
+                System.out.println("Berhasil dicetak di file");
+            } catch (IOException e) {
+                System.out.println("Ada error: ");
+                e.printStackTrace();
+            }
+        }
     }
 
     /*void printToFile() {

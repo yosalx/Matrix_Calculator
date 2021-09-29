@@ -51,7 +51,13 @@ public class Main {
                             for (int i = 0; i < row; i++) {
                                 m.setElmt(i, count);
                             }
-                            m.findSPLwithInv();
+                            System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                            int choicePrint = choice.nextInt();
+                            if (choicePrint == 0) {
+                                m.findSPLwithInv(true); 
+                            } else {
+                                m.findSPLwithInv(false);
+                            }
                         }
                         if (choiceKind == 1) {
                             int row, col;
@@ -63,7 +69,13 @@ public class Main {
                             m.createMatriks(row, col);
                             System.out.println("Isi matriks di bawah ini: ");
                             m.readMatrix();
-                            m.findSPLwithInv();
+                            System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                            int choicePrint = choice.nextInt();
+                            if (choicePrint == 0) {
+                                m.findSPLwithInv(true); 
+                            } else {
+                                m.findSPLwithInv(false);
+                            }
                         }
                     }
                     if (choiceRead == 1) {
@@ -91,7 +103,13 @@ public class Main {
                         m.createMatriks(row, col);
                         System.out.println("Isi matriks di bawah ini: ");
                         m.readMatrix();
-                        m.kaidah_crammer();
+                        System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.kaidah_crammer(true); 
+                        } else {
+                            m.kaidah_crammer(false);
+                        }
                     }
                     if (choiceRead == 1) {
                         int row, col;
@@ -129,7 +147,7 @@ public class Main {
                         System.out.printf("Pilih 0 untuk menyimpan di file: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
-                            m.writeMatrixToFile();
+                            m.writeMatrixInvToFile();
                         }
                     }
                     if (choiceRead == 1) {
@@ -161,7 +179,7 @@ public class Main {
                         System.out.printf("Pilih 0 untuk menyimpan di file: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
-                            m.writeMatrixToFile();
+                            m.writeMatrixInvToFile();
                         }
                     }
                 }
@@ -186,6 +204,11 @@ public class Main {
                         System.out.println("Isi matriks di bawah ini: ");
                         m.readMatrix();
                         m.getDeterminantOBE();
+                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.writeMatrixDetToFile();
+                        }
                     }
                     if (choiceRead == 1) {
                         int row, col;
@@ -215,6 +238,11 @@ public class Main {
                         Matriks n = new Matriks();
                         n.createMatriks(row, col);
                         m.getDeterminantC(n);
+                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.writeMatrixDetToFile();
+                        }
                     }
 
                     if (choiceRead == 1) {
@@ -243,7 +271,14 @@ public class Main {
                     m.createMatriks(row, col);
                     System.out.println("Isi polinom di bawah ini: ");
                     m.polynomRead();
-                    m.polynomInterpolate(true);
+                    System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                    int choicePrint = choice.nextInt();
+                    if (choicePrint == 0) {
+                        m.polynomInterpolate(true); 
+                    } else {
+                        m.polynomInterpolate(false);
+                    }
+                    
                 }
                 if (choiceRead == 1) {
                     int row, col;
