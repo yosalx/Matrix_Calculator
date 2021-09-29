@@ -796,7 +796,7 @@ public class Matriks {
             }
         }
         m.elimGaussJordan();
-        System.out.printf("\nPersamaan Regresi Linear Berganda dari persamaan yang diberikan adalah: ");
+        System.out.printf("\nPersamaan Regresi Linear Berganda dari data yang diberikan adalah: ");
         System.out.printf("Y = %6.4f ", m.Mtrx[0][m.Col-1]);
         int i;
         for (i = 1; i < m.Row ; i++) {
@@ -813,6 +813,6 @@ public class Matriks {
         for(i = 1; i <= n_factor; i++){
             y += m.Mtrx[i][m.Col-1] * est[i-1];
         }
-        System.out.print("Nilai taksirannya adalah: ");
-        System.out.printf("\nY = %6.4f", y);    }
+        System.out.print("\nTaksiran atau estimasi nilainya adalah: ");
+        System.out.printf(" Y = %6.4f", y);    }
 }
