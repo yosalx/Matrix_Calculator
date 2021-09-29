@@ -122,6 +122,25 @@ public class Matriks {
             System.out.print("\n");
         }    
     }
+
+    public void writeMatrixToFile() {
+        try {
+            FileWriter writer = new FileWriter("output.txt");
+            int i, j;
+            for (i = RowMin; i < this.Row; i++) {
+                for (j = ColMin; j < this.Col; j++) {
+                    writer.write(getElmt(i, j) + " ");
+                }
+                writer.write("\n");
+            }
+            writer.close();
+            System.out.println("Berhasil dicetak di file");
+        } catch (IOException e) {
+            System.out.println("Ada error: ");
+            e.printStackTrace();
+        }
+
+    }
     
     public boolean isSquare() {
         return (this.Row == this.Col);

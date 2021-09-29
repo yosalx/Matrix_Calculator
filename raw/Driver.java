@@ -5,7 +5,7 @@ import java.io.*;
 
 public class Driver {
     public static void main(String[] args) throws IOException {
-        Scanner input = new Scanner(System.in);        
+        //Scanner input = new Scanner(System.in);        
         //Matriks m = new Matriks();
         //int n;
         //System.out.print("\nMasukkan banyak peubah: ");
@@ -26,20 +26,21 @@ public class Driver {
         //m.findSPLwithInv();
         // m.polynomInterpolate(true);
         //m.writeMatrix();
-        int row, col, count;
-        System.out.printf("Masukkan jumlah n: ");
-        count = input.nextInt();
-        row = count;
-        col = count + 1;
+        //int row, col, count;
+        //System.out.printf("Masukkan jumlah n: ");
+        //count = input.nextInt();
+        //row = count;
+        //col = count + 1;
         Matriks m = new Matriks();
-        m.createMatriks(4, 6);
+        m.createMatriks(3, 3);
         m.readMatrix();
         //System.out.println("Isi matriks hasil: ");
         //for (int i = 0; i < row; i++) {
         //    m.setElmt(i, count);
         //}
         m.writeMatrix();
-        m.elimGaussJordan();
-        m.writeMatrix();
+        //m.elimGaussJordan();
+        //m.writeMatrix();
+        m.writeMatrixToFile();
     }
 }

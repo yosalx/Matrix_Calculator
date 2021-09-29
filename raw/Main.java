@@ -126,6 +126,11 @@ public class Main {
                         System.out.println("Isi matriks di bawah ini: ");
                         m.readMatrix();
                         m.inversGaussWrite();
+                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.writeMatrixToFile();
+                        }
                     }
                     if (choiceRead == 1) {
                         int row, col;
@@ -153,6 +158,11 @@ public class Main {
                         System.out.println("Isi matriks di bawah ini: ");
                         m.readMatrix();
                         m.adjoint_invers();
+                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.writeMatrixToFile();
+                        }
                     }
                 }
                 break;
