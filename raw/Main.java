@@ -36,16 +36,35 @@ public class Main {
                     System.out.printf("Pilih 0 untuk memasukkan matriks secara langsung dan 1 untuk membaca dari file: ");
                     int choiceRead = choice.nextInt();
                     if (choiceRead == 0) {
-                        int row, col;
-                        System.out.printf("Masukkan ukuran baris: ");
-                        row = choice.nextInt();
-                        System.out.printf("Masukkan ukuran kolom: ");
-                        col = choice.nextInt();
-                        Matriks m = new Matriks();
-                        m.createMatriks(row, col);
-                        System.out.println("Isi matriks di bawah ini: ");
-                        m.readMatrix();
-                        m.findSPLwithInv();
+                        System.out.printf("Pilih 0 untuk membuat matriks hilbert atau 1 jika bukan :");
+                        int choiceKind = choice.nextInt();
+                        if (choiceKind == 0) {
+                            int row, col, count;
+                            System.out.printf("Masukkan jumlah n: ");
+                            count = choice.nextInt();
+                            row = count;
+                            col = count + 1;
+                            Matriks m = new Matriks();
+                            m.createMatriks(row, col);
+                            m.readMatrixHilbert(count);
+                            System.out.println("Isi matriks hasil: ");
+                            for (int i = 0; i < row; i++) {
+                                m.setElmt(i, count);
+                            }
+                            m.findSPLwithInv();
+                        }
+                        if (choiceKind == 1) {
+                            int row, col;
+                            System.out.printf("Masukkan ukuran baris: ");
+                            row = choice.nextInt();
+                            System.out.printf("Masukkan ukuran kolom: ");
+                            col = choice.nextInt();
+                            Matriks m = new Matriks();
+                            m.createMatriks(row, col);
+                            System.out.println("Isi matriks di bawah ini: ");
+                            m.readMatrix();
+                            m.findSPLwithInv();
+                        }
                     }
                     if (choiceRead == 1) {
                         int row, col;

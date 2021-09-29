@@ -9,6 +9,7 @@ public class Matriks {
     public int Row, Col, countSwap;
     public double saveDividers = 1;
     public double[][] Mtrx;
+    public boolean hasInverse;
     Scanner scanner = new Scanner(System.in);
 
     public void createMatriks(int row, int col) {
@@ -45,11 +46,29 @@ public class Matriks {
         this.Mtrx[row][col] = scanner.nextDouble();
     }
 
+    public void setValueElmt(int row, int col, double value) {
+        this.Mtrx[row][col] = value;
+    }
+
     public void readMatrix() {
         int i, j;
         for (i = RowMin; i < this.Row; i++) {
             for (j = ColMin; j < this.Col; j++) {
                 setElmt(i, j);
+            }
+        }
+    }
+
+    public void readMatrixHilbert(int n) {
+        int i, j;
+        for (i = RowMin; i < n; i++) {
+            for (j = ColMin; j < n; j++) {
+                setValueElmt(i, j, 1);
+            }
+        }
+        for (i = RowMin; i < n; i++) {
+            for (j = ColMin; j < n; j++) {
+                this.Mtrx[i][j] /= (i+j+1);
             }
         }
     }
@@ -507,6 +526,7 @@ public class Matriks {
         }
         if (!isIdentity(this)) {
             System.out.println("Matriks tidak mempunyai invers");
+            
         } else {
             this.Mtrx = inv.Mtrx;
             this.writeMatrix();
