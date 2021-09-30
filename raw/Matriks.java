@@ -548,6 +548,8 @@ public class Matriks {
     }
 
     public void inversGaussWrite() {
+        double det;
+        det = this.determinantOBE();
         Matriks inv = new Matriks();
         inv.createMatriks(this.Row, this.Col);
         int i, j;
@@ -628,7 +630,7 @@ public class Matriks {
                 }
             }
         }
-        if (!isIdentity(this)) {
+        if ((det == 0) ||(!isIdentity(this))) {
             System.out.println("Matriks tidak mempunyai invers");
             this.hasInverse = false;
         } else {
