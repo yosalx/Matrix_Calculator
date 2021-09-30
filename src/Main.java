@@ -274,10 +274,9 @@ public class Main {
                 choiceRead = choice.nextInt();
                 if (choiceRead == 0) {
                     int row, col;
-                    System.out.printf("Masukkan ukuran baris: ");
+                    System.out.printf("Masukkan banyak data: ");
                     row = choice.nextInt();
-                    System.out.printf("Masukkan ukuran kolom: ");
-                    col = choice.nextInt();
+                    col = row + 1;
                     Matriks m = new Matriks();
                     m.createMatriks(row, col);
                     System.out.println("Isi polinom di bawah ini: ");
@@ -337,4 +336,3 @@ public class Main {
         }
     }
 }
-

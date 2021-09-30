@@ -93,7 +93,6 @@ public class Matriks {
                 this.Mtrx[i][j] = (double) Math.pow(an[i], j);
             }
         }
-        // this.elimGaussJordan();
         for (i = 0; i < this.Row; i++) {
             this.Mtrx[i][this.Col - 1] = bn[i];
         }
@@ -106,7 +105,7 @@ public class Matriks {
             ArrayList<String> num = new ArrayList<String>();
             int countrow = 0;
             int countcol = 0;
-            BufferedReader input = new BufferedReader(new FileReader(fileName));
+            BufferedReader input = new BufferedReader(new FileReader("../test/" + fileName));
             String readLine = input.readLine();
             while (readLine != null) {
                 String[] readLineS = readLine.split(" ");
@@ -118,7 +117,7 @@ public class Matriks {
                 readLine = input.readLine();
             }
             input.close();
-            this.createMatriks(countrow, countrow);
+            this.createMatriks(countrow, countcol);
             int i, j;
             int param = 0;
             for (i = RowMin; i < countrow; i++) {
@@ -154,7 +153,7 @@ public class Matriks {
                 writer.write("\n");
             }
             writer.close();
-            System.out.println("Berhasil dicetak di file");
+            System.out.println("\nBerhasil dicetak di file");
         } catch (IOException e) {
             System.out.println("Ada error: ");
             e.printStackTrace();
@@ -173,7 +172,7 @@ public class Matriks {
             }
             writer.write("Determinan dari matriks tersebut adalah: " + determinantOBE());
             writer.close();
-            System.out.println("Berhasil dicetak di file");
+            System.out.println("\nBerhasil dicetak di file");
         } catch (IOException e) {
             System.out.println("Ada error: ");
             e.printStackTrace();
@@ -628,7 +627,7 @@ public class Matriks {
                 }
             }
         }
-        if (!isIdentity(this)) {
+        if ((!isIdentity(this))) {
             System.out.println("Matriks tidak mempunyai invers");
             this.hasInverse = false;
         } else {
@@ -637,93 +636,6 @@ public class Matriks {
             this.hasInverse = true;
         }
     }
-
-    /*public Matriks inversGauss() {
-        Matriks inv = new Matriks();
-        inv.createMatriks(this.Row, this.Col);
-        int i, j;
-        for (i = 0; i < this.Row; i++) {
-            inv.Mtrx[i][i] = 1;
-        }
-        double divide, multiply;
-        int zeroCol = 0;
-        for (i = 0; i < this.Row; i++) {
-            for (j = i + zeroCol; j < this.Col; j++) {
-                if (isZero(i, i+zeroCol)) {
-                    if (isBelowRowZero(i, i)) {
-                        zeroCol++;
-                    } else {
-                        int a;
-                        for (a = i + 1; a < this.Row; a++) {
-                            if (!isZero(a, i)) {
-                                double temp;
-                                for (j = 0; j < this.Col; j++) {
-                                    temp = this.Mtrx[a][j];
-                                    this.Mtrx[a][j] = this.Mtrx[i][j];
-                                    this.Mtrx[i][j] = temp;
-                                    temp = inv.Mtrx[a][j];
-                                    inv.Mtrx[a][j] = inv.Mtrx[i][j];
-                                    inv.Mtrx[i][j] = temp;
-                                }
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
-
-            if (j >= this.Col) {
-                break;
-            }
-            divide = this.Mtrx[i][j];
-            while (divide == 0) {
-                j++;
-                divide = this.Mtrx[i][j];
-            }
-            int k;
-            for (k = j; k < this.Col; k++) {
-                this.Mtrx[i][k] /= divide;
-            }
-            for (k = 0; k < this.Col; k++) {
-                inv.Mtrx[i][k] /= divide;
-            }
-            for (k = i+1; k < this.Row; k++) {
-                multiply = this.Mtrx[k][j];
-                int subj;
-                for (subj = j; subj < this.Col; subj++) {
-                    this.Mtrx[k][subj] -= multiply*this.Mtrx[i][subj];
-                }
-                for (subj = 0; subj < this.Col; subj++) {
-                    inv.Mtrx[k][subj] -= multiply*inv.Mtrx[i][subj];
-                }
-            } 
-        }
-        for (i = 0; i < this.Row; i++) {
-            for (j = i; j < this.Col; j++) {
-                if (this.Mtrx[i][j] == 1) {
-                    int k;
-                    for (k = 0; k < i; k++) {
-                        if (!isZero(k, j)) {
-                            multiply = this.Mtrx[k][j];
-                            for (int subj = j; subj < this.Col; subj++) {
-                                this.Mtrx[k][subj] -= this.Mtrx[i][subj]*multiply;
-                            }
-                            for (int subj = 0; subj < this.Col; subj++) {
-                                inv.Mtrx[k][subj] -= inv.Mtrx[i][subj]*multiply;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if (!isIdentity(this)) {
-            System.out.println("Matriks tidak mempunyai invers");
-        }
-        return inv;
-    }*/
     
     public void findSPLwithInv(boolean toFile) {
         Matriks matPers = new Matriks();
@@ -778,14 +690,14 @@ public class Matriks {
             }
         }
         else{
-            System.out.printf(", solusi tidak bisa dicari.");
+            System.out.printf("Solusi tidak bisa dicari.");
 
             if(toFile){
                 try{
                     FileWriter writer = new FileWriter("outputSolusiSPL.txt");
                     writer.write("Matriks tidak memiliki inverse, solusi tidak bisa dicari.");
                     writer.close();
-                    System.out.println("Berhasil dicetak di file");
+                    System.out.println("\nBerhasil dicetak di file");
                 }
                 catch (IOException e){
                     System.out.println("Ada error: ");
@@ -864,27 +776,13 @@ public class Matriks {
                 }
                 writer.write("\nP(" + find + ") = " + result);
                 writer.close();
-                System.out.println("Berhasil dicetak di file");
+                System.out.println("\nBerhasil dicetak di file");
             } catch (IOException e) {
                 System.out.println("Ada error: ");
                 e.printStackTrace();
             }
         }
     }
-
-    /*void printToFile() {
-        try {
-            FileWriter w = new FileWriter(new PrintWriter("output.txt"));
-            for (int i = 0; i < this.Row; i++) {
-                for (int j = 0; j < this.Col; j++) {
-                    w.printf("%.2f", this.Mtrx[i][j]);
-                }
-                w.printf();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    } */
 
     void findsplwithGauss(){
         this.elimGauss();
