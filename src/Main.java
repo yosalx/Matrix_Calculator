@@ -28,9 +28,124 @@ public class Main {
                 System.out.printf("Masukkan pilihan metode: ");
                 choiceMethod = choice.nextInt();
                 if (choiceMethod == 1) {
-                    break; // belom ada fungsinya
+                    System.out.printf("Pilih 0 untuk memasukkan matriks secara langsung dan 1 untuk membaca dari file: ");
+                    choiceRead = choice.nextInt();
+                    if (choiceRead == 0) {
+                        System.out.printf("Pilih 0 untuk membuat matriks hilbert atau 1 jika bukan :");
+                        int choiceKind = choice.nextInt();
+                        if (choiceKind == 0) {
+                            int row, col, count;
+                            System.out.printf("Masukkan jumlah n: ");
+                            count = choice.nextInt();
+                            row = count;
+                            col = count + 1;
+                            Matriks m = new Matriks();
+                            m.createMatriks(row, col);
+                            m.readMatrixHilbert(count);
+                            System.out.println("Isi matriks hasil: ");
+                            for (int i = 0; i < row; i++) {
+                                m.setElmt(i, count);
+                            }
+                            System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
+                            int choicePrint = choice.nextInt();
+                            if (choicePrint == 0) {
+                                m.findsplwithGauss(true); 
+                            } else {
+                                m.findsplwithGauss(false);
+                            }
+                        }
+                        if (choiceKind == 1) {
+                            int row, col;
+                            System.out.printf("Masukkan ukuran baris: ");
+                            row = choice.nextInt();
+                            System.out.printf("Masukkan ukuran kolom: ");
+                            col = choice.nextInt();
+                            Matriks m = new Matriks();
+                            m.createMatriks(row, col);
+                            System.out.println("Isi matriks di bawah ini: ");
+                            m.readMatrix();
+                            System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
+                            int choicePrint = choice.nextInt();
+                            if (choicePrint == 0) {
+                                m.findsplwithGauss(true); 
+                            } else {
+                                m.findsplwithGauss(false);
+                            }
+                        }
+                    }
+                    if (choiceRead == 1) {
+                        Matriks m = new Matriks();
+                        m.readMatrixfromFile(); 
+                        m.writeMatrix();
+                        System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.findsplwithGauss(); 
+                        } else {
+                            m.findsplwithGauss();
+                        }
+                    }
+                }
                 }
                 if (choiceMethod == 2) {
+                    System.out.printf("Pilih 0 untuk memasukkan matriks secara langsung dan 1 untuk membaca dari file: ");
+                    choiceRead = choice.nextInt();
+                    if (choiceRead == 0) {
+                        System.out.printf("Pilih 0 untuk membuat matriks hilbert atau 1 jika bukan :");
+                        int choiceKind = choice.nextInt();
+                        if (choiceKind == 0) {
+                            int row, col, count;
+                            System.out.printf("Masukkan jumlah n: ");
+                            count = choice.nextInt();
+                            row = count;
+                            col = count + 1;
+                            Matriks m = new Matriks();
+                            m.createMatriks(row, col);
+                            m.readMatrixHilbert(count);
+                            System.out.println("Isi matriks hasil: ");
+                            for (int i = 0; i < row; i++) {
+                                m.setElmt(i, count);
+                            }
+                            System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
+                            int choicePrint = choice.nextInt();
+                            if (choicePrint == 0) {
+                                m.findsplwithGaussJordan(true); 
+                            } else {
+                                m.findsplwithGaussJordan(false);
+                            }
+                        }
+                        if (choiceKind == 1) {
+                            int row, col;
+                            System.out.printf("Masukkan ukuran baris: ");
+                            row = choice.nextInt();
+                            System.out.printf("Masukkan ukuran kolom: ");
+                            col = choice.nextInt();
+                            Matriks m = new Matriks();
+                            m.createMatriks(row, col);
+                            System.out.println("Isi matriks di bawah ini: ");
+                            m.readMatrix();
+                            System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
+                            int choicePrint = choice.nextInt();
+                            if (choicePrint == 0) {
+                                m.findsplwithGaussJordan(true); 
+                            } else {
+                                m.findsplwithGaussJordan(false);
+                            }
+                        }
+                    }
+                    if (choiceRead == 1) {
+                        Matriks m = new Matriks();
+                        m.readMatrixfromFile(); 
+                        m.writeMatrix();
+                        System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.findsplwithGaussJordan(true); 
+                        } else {
+                            m.findsplwithGaussJordan(false);
+                        }
+                    }
+                }                    
                     break; // belom ada fungsinya
                 }
                 if (choiceMethod == 3) {
@@ -52,7 +167,7 @@ public class Main {
                             for (int i = 0; i < row; i++) {
                                 m.setElmt(i, count);
                             }
-                            System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                            System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
                             int choicePrint = choice.nextInt();
                             if (choicePrint == 0) {
                                 m.findSPLwithInv(true); 
@@ -70,7 +185,7 @@ public class Main {
                             m.createMatriks(row, col);
                             System.out.println("Isi matriks di bawah ini: ");
                             m.readMatrix();
-                            System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                            System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
                             int choicePrint = choice.nextInt();
                             if (choicePrint == 0) {
                                 m.findSPLwithInv(true); 
@@ -83,7 +198,7 @@ public class Main {
                         Matriks m = new Matriks();
                         m.readMatrixfromFile(); 
                         m.writeMatrix();
-                        System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.findSPLwithInv(true); 
@@ -105,7 +220,7 @@ public class Main {
                         m.createMatriks(row, col);
                         System.out.println("Isi matriks di bawah ini: ");
                         m.readMatrix();
-                        System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.kaidah_crammer(true); 
@@ -116,7 +231,7 @@ public class Main {
                     if (choiceRead == 1) {
                         Matriks m = new Matriks();
                         m.readMatrixfromFile(); 
-                        System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.kaidah_crammer(true); 
@@ -146,7 +261,7 @@ public class Main {
                         System.out.println("Isi matriks di bawah ini: ");
                         m.readMatrix();
                         m.inversGaussWrite();
-                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di file atau 1 untuk mencetak ke layar: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.writeMatrixInvToFile();
@@ -156,7 +271,7 @@ public class Main {
                         Matriks m = new Matriks();
                         m.readMatrixfromFile(); 
                         m.inversGaussWrite();
-                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di file atau 1 untuk mencetak ke layar: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.writeMatrixInvToFile();
@@ -177,7 +292,7 @@ public class Main {
                         System.out.println("Isi matriks di bawah ini: ");
                         m.readMatrix();
                         m.adjoint_invers();
-                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di file atau 1 untuk mencetak ke layar: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.writeMatrixInvToFile();
@@ -187,7 +302,7 @@ public class Main {
                         Matriks m = new Matriks();
                         m.readMatrixfromFile(); 
                         m.adjoint_invers();
-                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di file atau 1 untuk mencetak ke layar: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.writeMatrixInvToFile();
@@ -215,7 +330,7 @@ public class Main {
                         System.out.println("Isi matriks di bawah ini: ");
                         m.readMatrix();
                         m.getDeterminantOBE();
-                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di file atau 1 untuk mencetak ke layar: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.writeMatrixDetToFile();
@@ -225,7 +340,7 @@ public class Main {
                         Matriks m = new Matriks();
                         m.readMatrixfromFile(); 
                         m.getDeterminantOBE();
-                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di file atau 1 untuk mencetak ke layar: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.writeMatrixDetToFile();
@@ -248,7 +363,7 @@ public class Main {
                         Matriks n = new Matriks();
                         n.createMatriks(row, col);
                         m.getDeterminantC(n);
-                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di file atau 1 untuk mencetak ke layar: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.writeMatrixDetToFile();
@@ -261,7 +376,7 @@ public class Main {
                         Matriks n = new Matriks();
                         n.createMatriks(m.Row, m.Col);
                         m.getDeterminantC(n);
-                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di file atau 1 untuk mencetak ke layar: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.writeMatrixDetToFile();
@@ -281,7 +396,7 @@ public class Main {
                     m.createMatriks(row, col);
                     System.out.println("Isi polinom di bawah ini: ");
                     m.polynomRead();
-                    System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                    System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
                     int choicePrint = choice.nextInt();
                     if (choicePrint == 0) {
                         m.polynomInterpolate(true); 
@@ -293,7 +408,7 @@ public class Main {
                 if (choiceRead == 1) {
                     Matriks m = new Matriks();
                     m.readPolynomfromFile(); 
-                    System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                    System.out.printf("Pilih 0 untuk menyimpan di dalam file atau 1 untuk mencetak ke layar: ");
                     int choicePrint = choice.nextInt();
                     if (choicePrint == 0) {
                         m.polynomInterpolate(true); 
@@ -322,7 +437,7 @@ public class Main {
                     for(i = 0; i < n; i++){
                         est[i] = choice.nextDouble();
                     }
-                    System.out.printf("Pilih 0 untuk menyimpan hasil di dalam file dan 1 untuk mencetak hasil ke layar: ");
+                    System.out.printf("Pilih 0 untuk menyimpan hasil di dalam file atau 1 untuk mencetak hasil ke layar: ");
                     int choicePrint = choice.nextInt();
                     if (choicePrint == 0) {
                         m.double_regression(m.Col-1, est, true ); 
@@ -340,7 +455,7 @@ public class Main {
                     for(i = 0; i < (m.Col-1); i++){
                         est[i] = choice.nextDouble();
                     }
-                    System.out.printf("Pilih 0 untuk menyimpan hasil di dalam file dan 1 untuk mencetak hasil ke layar: ");
+                    System.out.printf("Pilih 0 untuk menyimpan hasil di dalam file atau 1 untuk mencetak hasil ke layar: ");
                     int choicePrint = choice.nextInt();
                     if (choicePrint == 0) {
                         m.double_regression(m.Col-1, est, true ); 
