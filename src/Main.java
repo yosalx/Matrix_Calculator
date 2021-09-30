@@ -330,6 +330,24 @@ public class Main {
                         m.double_regression(m.Col-1, est, false);
                     }
                 }
+                if(choiceRead == 1){
+                    Matriks m = new Matriks();
+                    m.readMatrixfromFile();
+                    System.out.println("\nMasukkan nilai yang ingin ditafsir:");
+                    double[] est;
+                    est = new double[m.Col-1];
+                    int i;
+                    for(i = 0; i < (m.Col-1); i++){
+                        est[i] = choice.nextDouble();
+                    }
+                    System.out.printf("Pilih 0 untuk menyimpan hasil di dalam file dan 1 untuk mencetak hasil ke layar: ");
+                    int choicePrint = choice.nextInt();
+                    if (choicePrint == 0) {
+                        m.double_regression(m.Col-1, est, true ); 
+                    } else {
+                        m.double_regression(m.Col-1, est, false);
+                    }
+                }
                 break;
             case 6:
                 break; // keluar

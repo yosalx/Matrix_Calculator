@@ -912,14 +912,14 @@ public class Matriks {
         m.elimGaussJordan();
         if(toFile == false){
             System.out.printf("\nPersamaan Regresi Linear Berganda dari data yang diberikan adalah: ");
-            System.out.printf("Y = %6.4f ", m.Mtrx[0][m.Col-1]);
+            System.out.printf("Y = %6.6f ", m.Mtrx[0][m.Col-1]);
             int i;
             for (i = 1; i < m.Row ; i++) {
                 if (m.Mtrx[i][m.Col-1] < 0) {
-                    System.out.printf("- %6.4fx^%d ", Math.abs(m.Mtrx[i][m.Col-1]), i);
+                    System.out.printf("- %6.6fx^%d ", Math.abs(m.Mtrx[i][m.Col-1]), i);
                 } 
                 else if (m.Mtrx[i][m.Col-1] > 0) {
-                    System.out.printf("+ %6.4fx^%d ", m.Mtrx[i][m.Col-1], i);
+                    System.out.printf("+ %6.6fx^%d ", m.Mtrx[i][m.Col-1], i);
                 }
             }
             System.out.println();
@@ -929,7 +929,7 @@ public class Matriks {
                 y += m.Mtrx[i][m.Col-1] * est[i-1];
             }
             System.out.print("\nTaksiran atau estimasi nilainya adalah: ");
-            System.out.printf(" Y = %6.4f", y);
+            System.out.printf(" Y = %6.6f", y);
         }
         else if(toFile){
             try {
