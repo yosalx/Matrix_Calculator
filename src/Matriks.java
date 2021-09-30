@@ -93,8 +93,56 @@ public class Matriks {
                 this.Mtrx[i][j] = (double) Math.pow(an[i], j);
             }
         }
-        for (i = 0; i < this.Row; i++) {
+        for (i = RowMin; i < this.Row; i++) {
             this.Mtrx[i][this.Col - 1] = bn[i];
+        }
+    }
+    
+    public void readPolynomfromFile() throws IOException {
+        String fileName;
+        fileName = scanner.nextLine();
+        try {
+            ArrayList<String> num = new ArrayList<String>();
+            int countrow = 0;
+            //int countcol = 0;
+            BufferedReader input = new BufferedReader(new FileReader("../test/" + fileName));
+            String readLine = input.readLine();
+            while (readLine != null) {
+                String[] readLineS = readLine.split(" ");
+                for (String x : readLineS) {
+                    num.add(x);
+                }
+                countrow++;
+                //countcol = readLineS.length;
+                readLine = input.readLine();
+            }
+            input.close();
+            this.createMatriks(countrow, countrow+1);
+            int i, j;
+            double an[];
+            double bn[];
+            an = new double[countrow+1];
+            bn = new double[countrow+1];
+            j = 0;
+
+            for (i = 0; i < this.Row; i++) {
+                this.Mtrx[i][j] = 1;
+            }
+            int param = 0;
+            for (i = RowMin; i < countrow; i++) {
+                an[i] = Double.parseDouble(num.get(param));
+                bn[i] = Double.parseDouble(num.get(param+1));
+                for (j = 1; j < countrow; j++) {
+                    this.Mtrx[i][j] = (double) Math.pow(an[i], j);
+                    param++;
+                }
+            }
+            for (i = RowMin; i < this.Row; i++) {
+                this.Mtrx[i][this.Col - 1] = bn[i];
+            }
+        } catch (Exception ie) {
+            System.out.printf("Oww ada kesalahan!");
+            this.createMatriks(0, 0);
         }
     }
     

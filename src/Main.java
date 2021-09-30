@@ -291,15 +291,15 @@ public class Main {
                     
                 }
                 if (choiceRead == 1) {
-                    int row, col;
-                    System.out.printf("Masukkan ukuran baris: ");
-                    row = choice.nextInt();
-                    System.out.printf("Masukkan ukuran kolom: ");
-                    col = choice.nextInt();
                     Matriks m = new Matriks();
-                    m.createMatriks(row, col);
-                    m.readMatrixfromFile(); 
-                    // ini nanti kasih func solusi trus tulis ke file
+                    m.readPolynomfromFile(); 
+                    System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                    int choicePrint = choice.nextInt();
+                    if (choicePrint == 0) {
+                        m.polynomInterpolate(true); 
+                    } else {
+                        m.polynomInterpolate(false);
+                    }
                 }
                 break;
             case 5:
