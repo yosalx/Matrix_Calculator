@@ -32,15 +32,14 @@ public class Driver {
         //row = count;
         //col = count + 1;
         Matriks m = new Matriks();
-        m.createMatriks(4, 5);
+        m.createMatriks(4, 6);
         m.readMatrix();
         //System.out.println("Isi matriks hasil: ");
         //for (int i = 0; i < row; i++) {
         //    m.setElmt(i, count);
         //}
-        m.writeMatrix();
         //m.elimGaussJordan();
         //m.writeMatrix();
-        m.findsplwithGauss(true);
+        m.findsplwithGauss(false);
     }
 }

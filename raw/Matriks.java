@@ -890,21 +890,44 @@ public class Matriks {
         this.elimGauss();
         boolean noSol = false;
         boolean multSol = false;
-        if (this.Mtrx[this.Row-1][this.Col-1] != 0d) {
-            noSol = true;
-            for (int i=0; i < this.Col-2; i++) {
-                if (this.Mtrx[this.Row-1][i] == 0d) {
-                    noSol = false;
+        if (this.Row == this.Col-1){
+            if (this.Mtrx[this.Row-1][this.Col-1] != 0d) {
+                noSol = true;
+                for (int i=0; i < this.Col-2; i++) {
+                    if (this.Mtrx[this.Row-1][i] == 0d) {
+                        noSol = false;
+                    }
+                }
+            }
+            else {
+                multSol = true;
+                for (int j=0; j < this.Col-2; j++){
+                    if (this.Mtrx[this.Row-1][j] != 0d) {
+                        multSol = false;
+                    }
                 }
             }
         }
-        else {
-            multSol = true;
-            for (int j=0; j < this.Col-2; j++){
-                if (this.Mtrx[this.Row-1][j] != 0d) {
-                    multSol = false;
+        else if (this.Row >= this.Col){
+            if (this.Mtrx[this.Col-1][this.Col-1] != 0d) {
+                noSol = true;
+                for (int i=0; i < this.Col-2; i++) {
+                    if (this.Mtrx[this.Col-1][i] == 0d) {
+                        noSol = false;
+                    }
                 }
             }
+            else {
+                multSol = true;
+                for (int j=0; j < this.Col-2; j++){
+                    if (this.Mtrx[this.Col-1][j] != 0d) {
+                        multSol = false;
+                    }
+                }
+            }         
+        }
+        else{
+            multSol = true;
         }
         if(toFile){
             try {
