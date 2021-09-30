@@ -911,8 +911,8 @@ public class Matriks {
         }
         else if (multSol) {
             System.out.printf("SPL memiliki banyak solusi");
-            this.elimGaussJordan();
             System.out.println();
+            int check = (this.Row)-1;
             char [] param = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
             for (int i=0; i < this.Col-1; i++){
                 System.out.printf("X%d = ", i+1);
@@ -969,6 +969,7 @@ public class Matriks {
         }
         else {
             System.out.printf("SPL memiliki solusi unik");
+            System.out.println();
             double sol[] =  new double[this.Col-1];
             for (int k = this.Col-2; k >= 0; k--){
                 sol[k] = this.Mtrx[k][this.Col-1];
@@ -978,9 +979,12 @@ public class Matriks {
                 sol[k] /= this.Mtrx[k][k];
             }
             System.out.printf("Solusi adalah:");
+            System.out.println();
             for (int i = 0; i < this.Col-1; i++)
             {
-              System.out.printf("%.2f", sol[i]);
+                System.out.printf("X%d = ", i+1);
+                System.out.printf("%.2f", sol[i]);
+                System.out.println();
             }
         }
     }
