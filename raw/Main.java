@@ -17,6 +17,7 @@ public class Main {
         System.out.printf("Masukkan pilihan: ");
         int choiceMenu = choice.nextInt();
         int choiceMethod;
+        int choiceRead;
         switch (choiceMenu) {
             case 1:
                 System.out.println("Daftar metode yang dapat digunakan:");
@@ -34,7 +35,7 @@ public class Main {
                 }
                 if (choiceMethod == 3) {
                     System.out.printf("Pilih 0 untuk memasukkan matriks secara langsung dan 1 untuk membaca dari file: ");
-                    int choiceRead = choice.nextInt();
+                    choiceRead = choice.nextInt();
                     if (choiceRead == 0) {
                         System.out.printf("Pilih 0 untuk membuat matriks hilbert atau 1 jika bukan :");
                         int choiceKind = choice.nextInt();
@@ -92,7 +93,7 @@ public class Main {
                 }
                 if (choiceMethod == 4) {
                     System.out.printf("Pilih 0 untuk memasukkan matriks secara langsung dan 1 untuk membaca dari file: ");
-                    int choiceRead = choice.nextInt();
+                    choiceRead = choice.nextInt();
                     if (choiceRead == 0) {
                         int row, col;
                         System.out.printf("Masukkan ukuran baris: ");
@@ -132,7 +133,7 @@ public class Main {
                 choiceMethod = choice.nextInt();
                 if (choiceMethod == 1) {
                     System.out.printf("Pilih 0 untuk memasukkan matriks secara langsung dan 1 untuk membaca dari file: ");
-                    int choiceRead = choice.nextInt();
+                    choiceRead = choice.nextInt();
                     if (choiceRead == 0) {
                         int row, col;
                         System.out.printf("Masukkan ukuran baris: ");
@@ -164,7 +165,7 @@ public class Main {
                 }
                 if (choiceMethod == 2) {
                     System.out.printf("Pilih 0 untuk memasukkan matriks secara langsung dan 1 untuk membaca dari file: ");
-                    int choiceRead = choice.nextInt();
+                    choiceRead = choice.nextInt();
                     if (choiceRead == 0) {
                         int row, col;
                         System.out.printf("Masukkan ukuran baris: ");
@@ -192,7 +193,7 @@ public class Main {
                 choiceMethod = choice.nextInt();
                 if (choiceMethod == 1) {
                     System.out.printf("Pilih 0 untuk memasukkan matriks secara langsung dan 1 untuk membaca dari file: ");
-                    int choiceRead = choice.nextInt();
+                    choiceRead = choice.nextInt();
                     if (choiceRead == 0) {
                         int row, col;
                         System.out.printf("Masukkan ukuran baris: ");
@@ -224,7 +225,7 @@ public class Main {
                 }
                 if (choiceMethod == 2) {
                     System.out.printf("Pilih 0 untuk memasukkan matriks secara langsung dan 1 untuk membaca dari file: ");
-                    int choiceRead = choice.nextInt();
+                    choiceRead = choice.nextInt();
                     if (choiceRead == 0) {
                         int row, col;
                         System.out.printf("Masukkan ukuran baris: ");
@@ -260,7 +261,7 @@ public class Main {
                 break;
             case 4: 
                 System.out.printf("Pilih 0 untuk memasukkan polinom secara langsung dan 1 untuk membaca dari file: ");
-                int choiceRead = choice.nextInt();
+                choiceRead = choice.nextInt();
                 if (choiceRead == 0) {
                     int row, col;
                     System.out.printf("Masukkan ukuran baris: ");
@@ -293,7 +294,33 @@ public class Main {
                 }
                 break;
             case 5:
-                // belom ada fungsinya
+                System.out.printf("Pilih 0 untuk memasukkan data secara langsung dan 1 untuk membaca dari file: ");
+                choiceRead = choice.nextInt();
+                if (choiceRead == 0) {
+                    Matriks m = new Matriks();
+                    int n,p;
+                    System.out.print("\nMasukkan banyak peubah: ");
+                    n = choice.nextInt();
+                    System.out.print("\nMasukkan banyak data per peubah: ");
+                    p = choice.nextInt();
+                    System.out.print("\nMasukkan data: \n");
+                    m.createMatriks(p, n+1);
+                    m.readMatrix();
+                    System.out.println("\nMasukkan nilai yang ingin ditafsir:");
+                    double[] est =  new double[1];
+                    est = new double[n];
+                    int i;
+                    for(i = 0; i < n; i++){
+                        est[i] = choice.nextDouble();
+                    }
+                    System.out.printf("Pilih 0 untuk menyimpan hasil di dalam file dan 1 untuk mencetak hasil ke layar: ");
+                    int choicePrint = choice.nextInt();
+                    if (choicePrint == 0) {
+                        m.double_regression(m.Col-1, est, true ); 
+                    } else {
+                        m.double_regression(m.Col-1, est, false);
+                    }
+                }
                 break;
             case 6:
                 break; // keluar

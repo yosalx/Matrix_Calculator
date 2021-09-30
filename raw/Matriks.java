@@ -882,7 +882,7 @@ public class Matriks {
         }
     }
 
-    void double_regression(int n_factor, double[] est){
+    void double_regression(int n_factor, double[] est, boolean toFile){
         Matriks m = new Matriks();
         m.createMatriks(this.Col, this.Col+1);
         int row, col;
@@ -916,23 +916,55 @@ public class Matriks {
             }
         }
         m.elimGaussJordan();
-        System.out.printf("\nPersamaan Regresi Linear Berganda dari data yang diberikan adalah: ");
-        System.out.printf("Y = %6.4f ", m.Mtrx[0][m.Col-1]);
-        int i;
-        for (i = 1; i < m.Row ; i++) {
-            if (m.Mtrx[i][m.Col-1] < 0) {
-                System.out.printf("- %6.4fx^%d ", Math.abs(m.Mtrx[i][m.Col-1]), i);
-            } 
-            else if (m.Mtrx[i][m.Col-1] > 0) {
-                System.out.printf("+ %6.4fx^%d ", m.Mtrx[i][m.Col-1], i);
+        if(toFile == false){
+            System.out.printf("\nPersamaan Regresi Linear Berganda dari data yang diberikan adalah: ");
+            System.out.printf("Y = %6.4f ", m.Mtrx[0][m.Col-1]);
+            int i;
+            for (i = 1; i < m.Row ; i++) {
+                if (m.Mtrx[i][m.Col-1] < 0) {
+                    System.out.printf("- %6.4fx^%d ", Math.abs(m.Mtrx[i][m.Col-1]), i);
+                } 
+                else if (m.Mtrx[i][m.Col-1] > 0) {
+                    System.out.printf("+ %6.4fx^%d ", m.Mtrx[i][m.Col-1], i);
+                }
+            }
+            System.out.println();
+            double y;
+            y = m.Mtrx[0][m.Col-1];
+            for(i = 1; i <= n_factor; i++){
+                y += m.Mtrx[i][m.Col-1] * est[i-1];
+            }
+            System.out.print("\nTaksiran atau estimasi nilainya adalah: ");
+            System.out.printf(" Y = %6.4f", y);
+        }
+        else if(toFile){
+            try {
+                FileWriter writer = new FileWriter("outputdouble_regression.txt");
+                writer.write("Persamaan Regresi Linear Berganda dari data adalah : ");
+                writer.write("Y = " + m.Mtrx[0][m.Col-1]);
+                int i;
+                for (i = 1; i < m.Row ; i++) {
+                    if (m.Mtrx[i][m.Col-1] < 0) {
+                        writer.write(" - "+ Math.abs(m.Mtrx[i][m.Col-1]) +"x^" + i);
+                    } 
+                    else if (m.Mtrx[i][m.Col-1] > 0) {
+                        writer.write(" + "+ m.Mtrx[i][m.Col-1]+"x^" + i);
+                    }
+                }
+                writer.write("");
+                double y;
+                y = m.Mtrx[0][m.Col-1];
+                for(i = 1; i <= n_factor; i++){
+                    y += m.Mtrx[i][m.Col-1] * est[i-1];
+                }
+                writer.write("\nTaksiran atau estimasi nilainya adalah: ");
+                writer.write(" Y = "+ y);
+                writer.close();
+                System.out.println("\nBerhasil dicetak di file");
+            } catch (IOException e) {
+                System.out.println("Ada error: ");
+                e.printStackTrace();
             }
         }
-        System.out.println();
-        double y;
-        y = m.Mtrx[0][m.Col-1];
-        for(i = 1; i <= n_factor; i++){
-            y += m.Mtrx[i][m.Col-1] * est[i-1];
-        }
-        System.out.print("\nTaksiran atau estimasi nilainya adalah: ");
-        System.out.printf(" Y = %6.4f", y);    }
+    }
 }
