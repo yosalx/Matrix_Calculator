@@ -911,6 +911,61 @@ public class Matriks {
         }
         else if (multSol) {
             System.out.printf("SPL memiliki banyak solusi");
+            this.elimGaussJordan();
+            System.out.println();
+            char [] param = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+            for (int i=0; i < this.Col-1; i++){
+                System.out.printf("X%d = ", i+1);
+                System.out.printf("%c", param[i]);
+                System.out.println();
+            }
+            for (int i=0; i < this.Row; i++) {
+                if (this.Mtrx[i][i] == 1d) {
+                    if (this.Mtrx[i][this.Col-1] != 0d){
+                        System.out.printf("X%d = %.2f ", i+1, this.Mtrx[i][this.Col-1]);
+                        for (int j=i+1; j<this.Col-1; j++){
+                            if (this.Mtrx[i][j] != 0){
+                                if (this.Mtrx[i][j] < 0d) {
+                                    System.out.printf("+ %.2f", -(this.Mtrx[i][j]));
+                                    System.out.printf("%c ", param[j]);
+                                }
+                                else {
+                                    System.out.printf("%.2f", -(this.Mtrx[i][j]));
+                                    System.out.printf("%c ", param[j]);
+                                }
+                            }
+                        }                        
+                    }
+                    else {
+                        System.out.printf("X%d = ", i+1);
+                        for (int j=i+1; j<this.Col-1; j++){
+                            if (this.Mtrx[i][j] != 0){
+                                System.out.printf("%.2f", -(this.Mtrx[i][j]));
+                                System.out.printf("%c ", param[j]);
+                            }
+                        }                        
+                    }
+                }
+                else {
+                    int temp = i;
+                    i +=1;
+                    if (this.Mtrx[temp][this.Col-1] != 0d){
+                        System.out.printf("X%d = %.2f ", i+1, this.Mtrx[temp][this.Col-1]);
+                        for (int j=i+1; j<this.Col-1; j++){
+                            if (this.Mtrx[temp][j] != 0){
+                                if (this.Mtrx[temp][j] < 0d) {
+                                    System.out.printf("+ %.2f", -(this.Mtrx[temp][j]));
+                                    System.out.printf("%c ", param[j]);
+                                }
+                                else {
+                                    System.out.printf("%.2f", -(this.Mtrx[temp][j]));
+                                    System.out.printf("%c ", param[j]);
+                                }
+                            }
+                        }                        
+                    }
+                }
+            }
         }
         else {
             System.out.printf("SPL memiliki solusi unik");
