@@ -541,11 +541,10 @@ public class Matriks {
                 }
             }
             System.out.println("Sehingga balikan dari matriks tersebut adalah: \n");
-            o.writeMatrix();
+            this.Mtrx = o.Mtrx;
+            this.writeMatrix();
             System.out.println("\n");
         }
-
-
     }
 
     public void inversGaussWrite() {

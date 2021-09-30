@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner choice = new Scanner(System.in);
         System.out.println("Selamat Datang di Program Matriks");
         System.out.println("Pilih Menu di Bawah ini:");
