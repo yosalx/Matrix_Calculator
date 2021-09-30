@@ -100,16 +100,36 @@ public class Matriks {
     }
     
     public void readMatrixfromFile() throws IOException {
-        BufferedReader input = new BufferedReader(new FileReader("tes.txt"));
-        String data = input.readLine();
-
-        int i, j;
-        for (i = 0; i < this.Row; i++) {
-            StringTokenizer string = new StringTokenizer(data, " ");
-            for (j = 0; j < this.Col; j++) {
-                this.Mtrx[i][j] = Double.valueOf(string.nextToken()).doubleValue();
+        String fileName;
+        fileName = scanner.nextLine();
+        try {
+            ArrayList<String> num = new ArrayList<String>();
+            int countrow = 0;
+            int countcol = 0;
+            BufferedReader input = new BufferedReader(new FileReader(fileName));
+            String readLine = input.readLine();
+            while (readLine != null) {
+                String[] readLineS = readLine.split(" ");
+                for (String x : readLineS) {
+                    num.add(x);
+                }
+                countrow++;
+                countcol = readLineS.length;
+                readLine = input.readLine();
             }
-            data = input.readLine();
+            input.close();
+            this.createMatriks(countrow, countrow);
+            int i, j;
+            int param = 0;
+            for (i = RowMin; i < countrow; i++) {
+                for (j = ColMin; j < countcol; j++) {
+                    setValueElmt(i, j, Double.parseDouble(num.get(param)));
+                    param++;
+                }
+            }
+        } catch (Exception ie) {
+            System.out.printf("Oww ada kesalahan!");
+            this.createMatriks(0, 0);
         }
     }
 
