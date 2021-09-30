@@ -99,7 +99,7 @@ public class Matriks {
         }
     }
     
-    public void readMatrixfromFile() throws IOException {
+    public void readMatrixfromFile() {
         String fileName;
         fileName = scanner.nextLine();
         try {
@@ -118,7 +118,7 @@ public class Matriks {
                 readLine = input.readLine();
             }
             input.close();
-            this.createMatriks(countrow, countrow);
+            this.createMatriks(countrow, countcol);
             int i, j;
             int param = 0;
             for (i = RowMin; i < countrow; i++) {
@@ -498,7 +498,7 @@ public class Matriks {
                         }
                         subdet = submatrix.determinantOBE();
                         sol = (subdet/det);
-                        writer.write("solusi X" + a+1 + " = " + sol + " ");
+                        writer.write("solusi X" + (a+1) + " = " + sol + " ");
                     }
                 }
                 writer.close();

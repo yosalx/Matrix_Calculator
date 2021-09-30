@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Scanner choice = new Scanner(System.in);
         System.out.println("Selamat Datang di Program Matriks");
         System.out.println("Pilih Menu di Bawah ini:");
@@ -80,15 +80,16 @@ public class Main {
                         }
                     }
                     if (choiceRead == 1) {
-                        int row, col;
-                        System.out.printf("Masukkan ukuran baris: ");
-                        row = choice.nextInt();
-                        System.out.printf("Masukkan ukuran kolom: ");
-                        col = choice.nextInt();
                         Matriks m = new Matriks();
-                        m.createMatriks(row, col);
                         m.readMatrixfromFile(); 
-                        // ini nanti kasih func solusi trus tulis ke file
+                        m.writeMatrix();
+                        System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.findSPLwithInv(true); 
+                        } else {
+                            m.findSPLwithInv(false);
+                        }
                     }
                 }
                 if (choiceMethod == 4) {
@@ -113,15 +114,15 @@ public class Main {
                         }
                     }
                     if (choiceRead == 1) {
-                        int row, col;
-                        System.out.printf("Masukkan ukuran baris: ");
-                        row = choice.nextInt();
-                        System.out.printf("Masukkan ukuran kolom: ");
-                        col = choice.nextInt();
                         Matriks m = new Matriks();
-                        m.createMatriks(row, col);
                         m.readMatrixfromFile(); 
-                        // ini nanti kasih func solusi trus tulis ke file
+                        System.out.printf("Pilih 0 untuk menyimpan di dalam file: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.kaidah_crammer(true); 
+                        } else {
+                            m.kaidah_crammer(false);
+                        }
                     }
                 }
                 break;
@@ -152,15 +153,14 @@ public class Main {
                         }
                     }
                     if (choiceRead == 1) {
-                        int row, col;
-                        System.out.printf("Masukkan ukuran baris: ");
-                        row = choice.nextInt();
-                        System.out.printf("Masukkan ukuran kolom: ");
-                        col = choice.nextInt();
                         Matriks m = new Matriks();
-                        m.createMatriks(row, col);
                         m.readMatrixfromFile(); 
-                        // ini nanti kasih func solusi trus tulis ke file
+                        m.inversGaussWrite();
+                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.writeMatrixInvToFile();
+                        }
                     }
                 }
                 if (choiceMethod == 2) {
@@ -183,7 +183,17 @@ public class Main {
                             m.writeMatrixInvToFile();
                         }
                     }
-                }
+                    if (choiceRead == 1) {
+                        Matriks m = new Matriks();
+                        m.readMatrixfromFile(); 
+                        m.adjoint_invers();
+                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.writeMatrixInvToFile();
+                        }
+                    }
+                }    
                 break;
             case 3:
                 System.out.println("Daftar metode yang dapat digunakan:");
@@ -212,15 +222,14 @@ public class Main {
                         }
                     }
                     if (choiceRead == 1) {
-                        int row, col;
-                        System.out.printf("Masukkan ukuran baris: ");
-                        row = choice.nextInt();
-                        System.out.printf("Masukkan ukuran kolom: ");
-                        col = choice.nextInt();
                         Matriks m = new Matriks();
-                        m.createMatriks(row, col);
                         m.readMatrixfromFile(); 
-                        // ini nanti kasih func solusi trus tulis ke file
+                        m.getDeterminantOBE();
+                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.writeMatrixDetToFile();
+                        }
                     }
                 }
                 if (choiceMethod == 2) {
@@ -247,15 +256,16 @@ public class Main {
                     }
 
                     if (choiceRead == 1) {
-                        int row, col;
-                        System.out.printf("Masukkan ukuran baris: ");
-                        row = choice.nextInt();
-                        System.out.printf("Masukkan ukuran kolom: ");
-                        col = choice.nextInt();
                         Matriks m = new Matriks();
-                        m.createMatriks(row, col);
-                        m.readMatrixfromFile(); 
-                        // ini nanti kasih func solusi trus tulis ke file
+                        m.readMatrixfromFile();
+                        Matriks n = new Matriks();
+                        n.createMatriks(m.Row, m.Col);
+                        m.getDeterminantC(n);
+                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
+                        int choicePrint = choice.nextInt();
+                        if (choicePrint == 0) {
+                            m.writeMatrixDetToFile();
+                        }
                     }
                 }
                 break;

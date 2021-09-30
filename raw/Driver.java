@@ -40,7 +40,6 @@ public class Driver {
         m.writeMatrix();
         //m.elimGaussJordan();
         //m.writeMatrix();
-        m.inversGaussWrite();
-        m.writeMatrixInvToFile();
+        m.findSPLwithInv(true);
     }
 }
