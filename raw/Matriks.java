@@ -99,7 +99,7 @@ public class Matriks {
         }
     }
     
-    public void readMatrixfromFile() {
+    public void readMatrixfromFile() throws IOException {
         String fileName;
         fileName = scanner.nextLine();
         try {
@@ -118,7 +118,7 @@ public class Matriks {
                 readLine = input.readLine();
             }
             input.close();
-            this.createMatriks(countrow, countcol);
+            this.createMatriks(countrow, countrow);
             int i, j;
             int param = 0;
             for (i = RowMin; i < countrow; i++) {
@@ -498,7 +498,7 @@ public class Matriks {
                         }
                         subdet = submatrix.determinantOBE();
                         sol = (subdet/det);
-                        writer.write("solusi X" + (a+1) + " = " + sol + " ");
+                        writer.write("solusi X" + a+1 + " = " + sol + " ");
                     }
                 }
                 writer.close();
@@ -518,7 +518,7 @@ public class Matriks {
         o.createMatriks(this.Row, this.Col);
 
         o = this.cofactor(n);
-        System.out.println("Kofaktor dari matriks tersebut adalah:\n");
+        System.out.println("\nKofaktor dari matriks tersebut adalah:\n");
         o.writeMatrix();
         System.out.println("\n");
 
@@ -530,14 +530,22 @@ public class Matriks {
         double det;
         det = this.determinantOBE();
 
-        for(int i = RowMin; i < this.Row;i++){
-            for(int j = ColMin; j < this.Col; j++){
-                o.Mtrx[i][j] = ((1/det)*(o.Mtrx[i][j]));
-            }
+        if (det == 0){
+            System.out.println("Matriks tidak bersifat invertible karena determinan matriks = 0");
         }
-        System.out.println("Sehingga balikan dari matriks tersebut adalah: \n");
-        o.writeMatrix();
-        System.out.println("\n");
+
+        else{
+            for(int i = RowMin; i < this.Row;i++){
+                for(int j = ColMin; j < this.Col; j++){
+                    o.Mtrx[i][j] = ((1/det)*(o.Mtrx[i][j]));
+                }
+            }
+            System.out.println("Sehingga balikan dari matriks tersebut adalah: \n");
+            o.writeMatrix();
+            System.out.println("\n");
+        }
+
+
     }
 
     public void inversGaussWrite() {
@@ -623,10 +631,11 @@ public class Matriks {
         }
         if (!isIdentity(this)) {
             System.out.println("Matriks tidak mempunyai invers");
-            
+            this.hasInverse = false;
         } else {
             this.Mtrx = inv.Mtrx;
             this.writeMatrix();
+            this.hasInverse = true;
         }
     }
 
@@ -735,37 +744,57 @@ public class Matriks {
         }
 
         matPers.inversGaussWrite();
-        for (i = RowMin; i < this.Row; i++) {
-            for (j = ColMin; j < this.Col - 1; j++) {
-                solution[i] += matPers.Mtrx[i][j]*colHasil.Mtrx[j][0]; 
+        if(this.hasInverse){
+            for (i = RowMin; i < this.Row; i++) {
+                for (j = ColMin; j < this.Col - 1; j++) {
+                    solution[i] += matPers.Mtrx[i][j]*colHasil.Mtrx[j][0]; 
+                }
+            }
+            //matPers.writeMatrix();
+            //colHasil.writeMatrix();
+            for (i = RowMin; i < this.Row; i++) {
+                System.out.printf("x%d = %.5f ", i + 1, solution[i]);
+            }
+    
+            if (toFile) {
+                try {
+                    FileWriter writer = new FileWriter("outputSolusiSPL.txt");
+                    for (i = RowMin; i < this.Row; i++) {
+                        for (j = ColMin; j < this.Col; j++) {
+                            writer.write(getElmt(i, j) + " ");
+                        }
+                        writer.write("\n");
+                    }
+                    writer.write("Solusi SPL di atas adalah:\n");
+                    for (i = RowMin; i < this.Row; i++) {
+                        writer.write("x" + (i+1) + " = " + solution[i] + " "); 
+                    }
+                    writer.close();
+                    System.out.println("Berhasil dicetak di file");
+                } 
+                catch (IOException e) {
+                    System.out.println("Ada error: ");
+                    e.printStackTrace();
+                }
             }
         }
-        //matPers.writeMatrix();
-        //colHasil.writeMatrix();
-        for (i = RowMin; i < this.Row; i++) {
-            System.out.printf("x%d = %.5f ", i + 1, solution[i]);
+        else{
+            System.out.printf(", solusi tidak bisa dicari.");
+
+            if(toFile){
+                try{
+                    FileWriter writer = new FileWriter("outputSolusiSPL.txt");
+                    writer.write("Matriks tidak memiliki inverse, solusi tidak bisa dicari.");
+                    writer.close();
+                    System.out.println("Berhasil dicetak di file");
+                }
+                catch (IOException e){
+                    System.out.println("Ada error: ");
+                    e.printStackTrace();
+                }
+            }
         }
 
-        if (toFile) {
-            try {
-                FileWriter writer = new FileWriter("outputSolusiSPL.txt");
-                for (i = RowMin; i < this.Row; i++) {
-                    for (j = ColMin; j < this.Col; j++) {
-                        writer.write(getElmt(i, j) + " ");
-                    }
-                    writer.write("\n");
-                }
-                writer.write("Solusi SPL di atas adalah:\n");
-                for (i = RowMin; i < this.Row; i++) {
-                    writer.write("x" + (i+1) + " = " + solution[i] + " "); 
-                }
-                writer.close();
-                System.out.println("Berhasil dicetak di file");
-            } catch (IOException e) {
-                System.out.println("Ada error: ");
-                e.printStackTrace();
-            }
-        }
     }
 
     public void polynomInterpolate(boolean toFile) {
