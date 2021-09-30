@@ -1,0 +1,6 @@
+SPL memiliki banyak solusi
+X1 = a
+X2 = b
+X3 = c
+X4 = d
+X1 = -1.0+ 1.0b -2.0c + 1.0d X2 =  2.0c

@@ -32,7 +32,8 @@ public class Driver {
         //row = count;
         //col = count + 1;
         Matriks m = new Matriks();
-        m.readMatrixfromFile();
+        m.createMatriks(4, 5);
+        m.readMatrix();
         //System.out.println("Isi matriks hasil: ");
         //for (int i = 0; i < row; i++) {
         //    m.setElmt(i, count);
@@ -40,6 +41,6 @@ public class Driver {
         m.writeMatrix();
         //m.elimGaussJordan();
         //m.writeMatrix();
-        m.findSPLwithInv(true);
+        m.findsplwithGauss(true);
     }
 }
