@@ -346,17 +346,15 @@ public class Main {
                     System.out.printf("Pilih 0 untuk memasukkan matriks secara langsung dan 1 untuk membaca dari file: ");
                     choiceRead = choice.nextInt();
                     if (choiceRead == 0) {
-                        int row, col;
-                        System.out.printf("Masukkan ukuran baris: ");
-                        row = choice.nextInt();
-                        System.out.printf("Masukkan ukuran kolom: ");
-                        col = choice.nextInt();
+                        int size;
+                        System.out.printf("Masukkan ukuran baris dan kolom: ");
+                        size = choice.nextInt();
                         Matriks m = new Matriks();
-                        m.createMatriks(row, col);
+                        m.createMatriks(size, size);
                         System.out.println("Isi matriks di bawah ini: ");
                         m.readMatrix();
                         m.getDeterminantOBE();
-                        System.out.printf("Pilih 0 untuk menyimpan di file atau 1 untuk mencetak ke layar: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.writeMatrixDetToFile();
@@ -366,7 +364,7 @@ public class Main {
                         Matriks m = new Matriks();
                         m.readMatrixfromFile(); 
                         m.getDeterminantOBE();
-                        System.out.printf("Pilih 0 untuk menyimpan di file atau 1 untuk mencetak ke layar: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di file");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
                             m.writeMatrixDetToFile();
@@ -377,22 +375,20 @@ public class Main {
                     System.out.printf("Pilih 0 untuk memasukkan matriks secara langsung dan 1 untuk membaca dari file: ");
                     choiceRead = choice.nextInt();
                     if (choiceRead == 0) {
-                        int row, col;
-                        System.out.printf("Masukkan ukuran baris: ");
-                        row = choice.nextInt();
-                        System.out.printf("Masukkan ukuran kolom: ");
-                        col = choice.nextInt();
+                        int size;
+                        System.out.printf("Masukkan ukuran baris dan kolom: ");
+                        size = choice.nextInt();
                         Matriks m = new Matriks();
-                        m.createMatriks(row, col);
+                        m.createMatriks(size, size);
                         System.out.println("Isi matriks di bawah ini: ");
                         m.readMatrix();
                         Matriks n = new Matriks();
-                        n.createMatriks(row, col);
+                        n.createMatriks(size, size);
                         m.getDeterminantC(n);
-                        System.out.printf("Pilih 0 untuk menyimpan di file atau 1 untuk mencetak ke layar: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
-                            m.writeMatrixDetToFile();
+                            m.writeMatrixDetCofToFile(n);
                         }
                     }
 
@@ -402,10 +398,10 @@ public class Main {
                         Matriks n = new Matriks();
                         n.createMatriks(m.Row, m.Col);
                         m.getDeterminantC(n);
-                        System.out.printf("Pilih 0 untuk menyimpan di file atau 1 untuk mencetak ke layar: ");
+                        System.out.printf("Pilih 0 untuk menyimpan di file: ");
                         int choicePrint = choice.nextInt();
                         if (choicePrint == 0) {
-                            m.writeMatrixDetToFile();
+                            m.writeMatrixDetCofToFile(n);
                         }
                     }
                 }

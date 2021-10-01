@@ -212,7 +212,7 @@ public class Matriks {
 
     public void writeMatrixDetToFile() {
         try {
-            FileWriter writer = new FileWriter("outputDeterminan.txt");
+            FileWriter writer = new FileWriter("outputDeterminanOBE.txt");
             int i, j;
             for (i = RowMin; i < this.Row; i++) {
                 for (j = ColMin; j < this.Col; j++) {
@@ -221,6 +221,25 @@ public class Matriks {
                 writer.write("\n");
             }
             writer.write("Determinan dari matriks tersebut adalah: " + determinantOBE());
+            writer.close();
+            System.out.println("\nBerhasil dicetak di file");
+        } catch (IOException e) {
+            System.out.println("Ada error: ");
+            e.printStackTrace();
+        }
+    }
+
+    public void writeMatrixDetCofToFile(Matriks m) {
+        try {
+            FileWriter writer = new FileWriter("outputDeterminanCof.txt");
+            int i, j;
+            for (i = RowMin; i < this.Row; i++) {
+                for (j = ColMin; j < this.Col; j++) {
+                    writer.write(getElmt(i, j) + " ");
+                }
+                writer.write("\n");
+            }
+            writer.write("Determinan dari matriks tersebut adalah: " + determinantC(m));
             writer.close();
             System.out.println("\nBerhasil dicetak di file");
         } catch (IOException e) {
@@ -426,7 +445,7 @@ public class Matriks {
     }
     
     public void getDeterminantOBE(){
-        System.out.println(this.determinantOBE());
+        System.out.println("determinan dari matriks yang diberikan adalah " + this.determinantOBE());
     }
     
     public Matriks subMatriks(int i, int j) {
@@ -448,7 +467,7 @@ public class Matriks {
         return m;
     }
 
-    public void getDeterminantC(Matriks m) {
+    public double determinantC(Matriks m) {
         Matriks sub;
         for (int i = RowMin; i < this.Row; i++) {
             for (int j = ColMin; j < this.Col; j++) {
@@ -461,7 +480,11 @@ public class Matriks {
         for (int j = ColMin; j < this.Col; j++) {
             det += getElmt(i, j) * m.Mtrx[i][j];
         }
-        System.out.printf("Determinan adalah %.2f ", det);
+        return det;
+    }
+
+    public void getDeterminantC(Matriks m){
+        System.out.println("determinan dari matriks yang diberikan adalah " + this.determinantC(m));
     }
 
     public Matriks cofactor(Matriks m){
@@ -1293,50 +1316,6 @@ public class Matriks {
         }
     }
 
-    void findsplwithGauss(){
-        this.elimGauss();
-        boolean noSol = false;
-        boolean multSol = false;
-        if (this.Mtrx[this.Row-1][this.Col-1] != 0d) {
-            noSol = true;
-            for (int i=0; i < this.Col-2; i++) {
-                if (this.Mtrx[this.Row-1][i] == 0d) {
-                    noSol = false;
-                }
-            }
-        }
-        else {
-            multSol = true;
-            for (int j=0; j < this.Col-2; j++){
-                if (this.Mtrx[this.Row-1][j] != 0d) {
-                    multSol = false;
-                }
-            }
-        }
-        if (noSol) {
-            System.out.printf("SPL tidak memiliki solusi");
-        }
-        else if (multSol) {
-            System.out.printf("SPL memiliki banyak solusi");
-        }
-        else {
-            System.out.printf("SPL memiliki solusi unik");
-            double sol[] =  new double[this.Col-1];
-            for (int k = this.Col-2; k >= 0; k--){
-                sol[k] = this.Mtrx[k][this.Col-1];
-                for (int l = k+1; l < this.Col-1; l++){
-                    sol[k] -= this.Mtrx[k][l]*sol[l];
-                }
-                sol[k] /= this.Mtrx[k][k];
-            }
-            System.out.printf("Solusi adalah:");
-            for (int i = 0; i < this.Col-1; i++)
-            {
-              System.out.printf("%.2f", sol[i]);
-            }
-        }
-    }
-
     void double_regression(int n_factor, double[] est, boolean toFile){
         Matriks m = new Matriks();
         m.createMatriks(this.Col, this.Col+1);
@@ -1384,12 +1363,21 @@ public class Matriks {
                 }
             }
             System.out.println();
+            System.out.println("\nSehingga nilai ");
+            for (i = 0; i < m.Row ; i++) {
+                if (m.Mtrx[i][m.Col-1] < 0) {
+                    System.out.printf("b%d = - %6.6f ",i, Math.abs(m.Mtrx[i][m.Col-1]));
+                } 
+                else if (m.Mtrx[i][m.Col-1] > 0) {
+                    System.out.printf("b%d = %6.6f ",i, m.Mtrx[i][m.Col-1]);
+                }
+            }
             double y;
             y = m.Mtrx[0][m.Col-1];
             for(i = 1; i <= n_factor; i++){
                 y += m.Mtrx[i][m.Col-1] * est[i-1];
             }
-            System.out.print("\nTaksiran atau estimasi nilainya adalah: ");
+            System.out.print("\n\n, dan taksiran atau estimasi dari nilai yang diberikan adalah adalah: ");
             System.out.printf(" Y = %6.6f", y);
         }
         else if(toFile){
@@ -1406,13 +1394,23 @@ public class Matriks {
                         writer.write(" + "+ m.Mtrx[i][m.Col-1]+"x^" + i);
                     }
                 }
+                writer.write(" ");
+                writer.write("\nSehingga nilai ");
+                for (i = 0; i < m.Row ; i++) {
+                    if (m.Mtrx[i][m.Col-1] < 0) {
+                        writer.write("b"+i +" = -" + Math.abs(m.Mtrx[i][m.Col-1]) + " ");
+                    } 
+                    else if (m.Mtrx[i][m.Col-1] > 0) {
+                        writer.write("b"+i + " = " + m.Mtrx[i][m.Col-1]+ " ");
+                    }
+                }
                 writer.write("");
                 double y;
                 y = m.Mtrx[0][m.Col-1];
                 for(i = 1; i <= n_factor; i++){
                     y += m.Mtrx[i][m.Col-1] * est[i-1];
                 }
-                writer.write("\nTaksiran atau estimasi nilainya adalah: ");
+                writer.write("\n\n, dan taksiran atau estimasi dari nilai yang diberikan adalah adalah: ");
                 writer.write(" Y = "+ y);
                 writer.close();
                 System.out.println("\nBerhasil dicetak di file");
