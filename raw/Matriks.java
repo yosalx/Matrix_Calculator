@@ -1279,20 +1279,11 @@ public class Matriks {
             else {
                 System.out.printf("SPL memiliki solusi unik");
                 System.out.println();
-                double sol[] =  new double[this.Col-1];
-                for (int k = this.Col-2; k >= 0; k--){
-                    sol[k] = this.Mtrx[k][this.Col-1];
-                    for (int l = k+1; l < this.Col-1; l++){
-                        sol[k] -= this.Mtrx[k][l]*sol[l];
-                    }
-                    sol[k] /= this.Mtrx[k][k];
-                }
                 System.out.printf("Solusi adalah:");
                 System.out.println();
-                for (int i = 0; i < this.Col-1; i++)
-                {
+                for (int i = 0; i < this.Row-1; i++){
                     System.out.printf("X%d = ", i+1);
-                    System.out.printf("%.2f", sol[i]);
+                    System.out.printf("%.2f", this.Mtrx[i][this.Col-1]);
                     System.out.println();
                 }
             }
