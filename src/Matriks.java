@@ -753,11 +753,9 @@ public class Matriks {
                                     if (this.Mtrx[i][j] != 0){
                                         if (this.Mtrx[i][j] < 0d) {
                                             writer.write("+ " + Math.abs((this.Mtrx[i][j])) + param[j] + " ");
-                                            //writer.write(param[j]);
                                         }
                                         else {
                                             writer.write("-" + (this.Mtrx[i][j]) + param[j] + " ");
-                                            //writer.write(param[j]);
                                         }
                                     }
                                 }                        
@@ -766,29 +764,42 @@ public class Matriks {
                                 writer.write("X"+ (i+1) +" = " );
                                 for (int j=i+1; j<this.Col-1; j++){
                                     if (this.Mtrx[i][j] != 0){
-                                        writer.write(" "+ Math.abs((this.Mtrx[i][j])) + param[j]);
-                                        //writer.write(param[j]);
+                                        writer.write(" "+ Math.abs((this.Mtrx[i][j])) + param[j] + " ");
                                     }
                                 }                        
                             }
                         }
                         else {
                             int temp = i;
-                            i +=1;
+                            int temp2 = i+1;
                             if (this.Mtrx[temp][this.Col-1] != 0d){
-                                writer.write("X" + (i+1) +" = " + this.Mtrx[temp][this.Col-1]);
-                                for (int j=i+1; j<this.Col-1; j++){
-                                    if (this.Mtrx[temp][j] != 0){
-                                        if (this.Mtrx[temp][j] < 0d) {
-                                            writer.write("+ " + (-(this.Mtrx[temp][j])));
-                                            writer.write(param[j]);
+                                if(this.Mtrx[temp][temp2] == 0){
+                                    temp2 +=1;
+                                    writer.write("X" + (temp2+1) + " = " + this.Mtrx[temp][this.Col-1]);
+                                    for (int j=temp2+1; j<this.Col-1; j++){
+                                        if (this.Mtrx[temp][j] != 0){
+                                            if (this.Mtrx[temp][j] < 0d) {
+                                                writer.write(" + " + Math.abs((this.Mtrx[temp][j])) + param[j] + " ");
+                                            }
+                                            else {
+                                                writer.write(" - " + (this.Mtrx[temp][j]) + param[j] + " ");
+                                            }
                                         }
-                                        else {
-                                            writer.write("-" +this.Mtrx[temp][j] + param[j]);
-                                            //writer.write(param[j]);
+                                    } 
+                                }
+                                else{
+                                    writer.write("X" + (temp2+1) + " = " + this.Mtrx[temp][this.Col-1]);
+                                    for (int j=temp2+1; j<this.Col-1; j++){
+                                        if (this.Mtrx[temp][j] != 0){
+                                            if (this.Mtrx[temp][j] < 0d) {
+                                                writer.write(" + " + Math.abs((this.Mtrx[temp][j])) + param[j] + " ");
+                                            }
+                                            else {
+                                                writer.write(" - " + (this.Mtrx[temp][j]) + param[j] + " ");
+                                            }
                                         }
-                                    }
-                                }                        
+                                    } 
+                                }                       
                             }
                         }
                     }
@@ -808,8 +819,7 @@ public class Matriks {
                     writer.write(" ");
                     for (int i = 0; i < this.Col-1; i++)
                     {
-                        writer.write("X" + (i+1) + " = " + sol[i]);
-                        //writer.write(sol[i]);
+                        writer.write("X" + (i+1) + " = " + sol[i] + " ");
                         writer.write("");
                     }
                 }
@@ -863,21 +873,39 @@ public class Matriks {
                     }
                     else {
                         int temp = i;
-                        i +=1;
+                        int temp2 = i+1;
                         if (this.Mtrx[temp][this.Col-1] != 0d){
-                            System.out.printf("X%d = %.2f ", i+1, this.Mtrx[temp][this.Col-1]);
-                            for (int j=i+1; j<this.Col-1; j++){
-                                if (this.Mtrx[temp][j] != 0){
-                                    if (this.Mtrx[temp][j] < 0d) {
-                                        System.out.printf("+ %.2f", -(this.Mtrx[temp][j]));
-                                        System.out.printf("%c ", param[j]);
+                            if(this.Mtrx[temp][temp2] == 0){
+                                temp2 +=1;
+                                System.out.printf("X%d = %.2f ", temp2+1, this.Mtrx[temp][this.Col-1]);
+                                for (int j=temp2+1; j<this.Col-1; j++){
+                                    if (this.Mtrx[temp][j] != 0){
+                                        if (this.Mtrx[temp][j] < 0d) {
+                                            System.out.printf("+ %.2f", -(this.Mtrx[temp][j]));
+                                            System.out.printf("%c ", param[j]);
+                                        }
+                                        else {
+                                            System.out.printf("%.2f", -(this.Mtrx[temp][j]));
+                                            System.out.printf("%c ", param[j]);
+                                        }
                                     }
-                                    else {
-                                        System.out.printf("%.2f", -(this.Mtrx[temp][j]));
-                                        System.out.printf("%c ", param[j]);
+                                } 
+                            }
+                            else{
+                                System.out.printf("X%d = %.2f ", temp2+1, this.Mtrx[temp][this.Col-1]);
+                                for (int j=temp2+1; j<this.Col-1; j++){
+                                    if (this.Mtrx[temp][j] != 0){
+                                        if (this.Mtrx[temp][j] < 0d) {
+                                            System.out.printf("+ %.2f", -(this.Mtrx[temp][j]));
+                                            System.out.printf("%c ", param[j]);
+                                        }
+                                        else {
+                                            System.out.printf("%.2f", -(this.Mtrx[temp][j]));
+                                            System.out.printf("%c ", param[j]);
+                                        }
                                     }
-                                }
-                            }                        
+                                } 
+                            }                       
                         }
                     }
                 }
@@ -909,21 +937,44 @@ public class Matriks {
         this.elimGaussJordan();
         boolean noSol = false;
         boolean multSol = false;
-        if (this.Mtrx[this.Row-1][this.Col-1] != 0d) {
-            noSol = true;
-            for (int i=0; i < this.Col-2; i++) {
-                if (this.Mtrx[this.Row-1][i] == 0d) {
-                    noSol = false;
+        if (this.Row == this.Col-1){
+            if (this.Mtrx[this.Row-1][this.Col-1] != 0d) {
+                noSol = true;
+                for (int i=0; i < this.Col-2; i++) {
+                    if (this.Mtrx[this.Row-1][i] == 0d) {
+                        noSol = false;
+                    }
+                }
+            }
+            else {
+                multSol = true;
+                for (int j=0; j < this.Col-2; j++){
+                    if (this.Mtrx[this.Row-1][j] != 0d) {
+                        multSol = false;
+                    }
                 }
             }
         }
-        else {
-            multSol = true;
-            for (int j=0; j < this.Col-2; j++){
-                if (this.Mtrx[this.Row-1][j] != 0d) {
-                    multSol = false;
+        else if (this.Row >= this.Col){
+            if (this.Mtrx[this.Col-1][this.Col-1] != 0d) {
+                noSol = true;
+                for (int i=0; i < this.Col-2; i++) {
+                    if (this.Mtrx[this.Col-1][i] == 0d) {
+                        noSol = false;
+                    }
                 }
             }
+            else {
+                multSol = true;
+                for (int j=0; j < this.Col-2; j++){
+                    if (this.Mtrx[this.Col-1][j] != 0d) {
+                        multSol = false;
+                    }
+                }
+            }         
+        }
+        else{
+            multSol = true;
         }
         if(toFile){
             try {
@@ -948,11 +999,9 @@ public class Matriks {
                                     if (this.Mtrx[i][j] != 0){
                                         if (this.Mtrx[i][j] < 0d) {
                                             writer.write("+ " + Math.abs((this.Mtrx[i][j])) + param[j] + " ");
-                                            //writer.write(param[j]);
                                         }
                                         else {
                                             writer.write("-" + (this.Mtrx[i][j]) + param[j] + " ");
-                                            //writer.write(param[j]);
                                         }
                                     }
                                 }                        
@@ -961,51 +1010,55 @@ public class Matriks {
                                 writer.write("X"+ (i+1) +" = " );
                                 for (int j=i+1; j<this.Col-1; j++){
                                     if (this.Mtrx[i][j] != 0){
-                                        writer.write(" "+ Math.abs((this.Mtrx[i][j])) + param[j]);
-                                        //writer.write(param[j]);
+                                        writer.write(" "+ Math.abs((this.Mtrx[i][j])) + param[j] + " ");
                                     }
                                 }                        
                             }
                         }
                         else {
                             int temp = i;
-                            i +=1;
+                            int temp2 = i+1;
                             if (this.Mtrx[temp][this.Col-1] != 0d){
-                                writer.write("X" + (i+1) +" = " + this.Mtrx[temp][this.Col-1]);
-                                for (int j=i+1; j<this.Col-1; j++){
-                                    if (this.Mtrx[temp][j] != 0){
-                                        if (this.Mtrx[temp][j] < 0d) {
-                                            writer.write("+ " + (-(this.Mtrx[temp][j])));
-                                            writer.write(param[j]);
+                                if(this.Mtrx[temp][temp2] == 0){
+                                    temp2 +=1;
+                                    writer.write("X" + (temp2+1) + " = " + this.Mtrx[temp][this.Col-1]);
+                                    for (int j=temp2+1; j<this.Col-1; j++){
+                                        if (this.Mtrx[temp][j] != 0){
+                                            if (this.Mtrx[temp][j] < 0d) {
+                                                writer.write(" + " + Math.abs((this.Mtrx[temp][j])) + param[j] + " ");
+                                            }
+                                            else {
+                                                writer.write(" - " + (this.Mtrx[temp][j]) + param[j] + " ");
+                                            }
                                         }
-                                        else {
-                                            writer.write("-" +this.Mtrx[temp][j] + param[j]);
-                                            //writer.write(param[j]);
+                                    } 
+                                }
+                                else{
+                                    writer.write("X" + (temp2+1) + " = " + this.Mtrx[temp][this.Col-1]);
+                                    for (int j=temp2+1; j<this.Col-1; j++){
+                                        if (this.Mtrx[temp][j] != 0){
+                                            if (this.Mtrx[temp][j] < 0d) {
+                                                writer.write(" + " + Math.abs((this.Mtrx[temp][j])) + param[j] + " ");
+                                            }
+                                            else {
+                                                writer.write(" - " + (this.Mtrx[temp][j]) + param[j] + " ");
+                                            }
                                         }
-                                    }
-                                }                        
+                                    } 
+                                }                       
                             }
                         }
                     }
                 }
                 else {
                     writer.write("SPL memiliki solusi unik");
-                    writer.write("");
-                    double sol[] =  new double[this.Col-1];
-                    for (int k = this.Col-2; k >= 0; k--){
-                        sol[k] = this.Mtrx[k][this.Col-1];
-                        for (int l = k+1; l < this.Col-1; l++){
-                            sol[k] -= this.Mtrx[k][l]*sol[l];
-                        }
-                        sol[k] /= this.Mtrx[k][k];
-                    }
+                    writer.write("\n");
                     writer.write("Solusi adalah:");
                     writer.write(" ");
-                    for (int i = 0; i < this.Col-1; i++)
-                    {
-                        writer.write("X" + (i+1) + " = " + sol[i]);
-                        //writer.write(sol[i]);
-                        writer.write("");
+                    for (int i = 0; i < this.Row-1; i++){
+                        writer.write("X" + (i+1) + " = ");
+                        writer.write("" + this.Mtrx[i][this.Col-1]);
+                        writer.write(" ");
                     }
                 }
                 writer.close();
@@ -1058,21 +1111,39 @@ public class Matriks {
                     }
                     else {
                         int temp = i;
-                        i +=1;
+                        int temp2 = i+1;
                         if (this.Mtrx[temp][this.Col-1] != 0d){
-                            System.out.printf("X%d = %.2f ", i+1, this.Mtrx[temp][this.Col-1]);
-                            for (int j=i+1; j<this.Col-1; j++){
-                                if (this.Mtrx[temp][j] != 0){
-                                    if (this.Mtrx[temp][j] < 0d) {
-                                        System.out.printf("+ %.2f", -(this.Mtrx[temp][j]));
-                                        System.out.printf("%c ", param[j]);
+                            if(this.Mtrx[temp][temp2] == 0){
+                                temp2 +=1;
+                                System.out.printf("X%d = %.2f ", temp2+1, this.Mtrx[temp][this.Col-1]);
+                                for (int j=temp2+1; j<this.Col-1; j++){
+                                    if (this.Mtrx[temp][j] != 0){
+                                        if (this.Mtrx[temp][j] < 0d) {
+                                            System.out.printf("+ %.2f", -(this.Mtrx[temp][j]));
+                                            System.out.printf("%c ", param[j]);
+                                        }
+                                        else {
+                                            System.out.printf("%.2f", -(this.Mtrx[temp][j]));
+                                            System.out.printf("%c ", param[j]);
+                                        }
                                     }
-                                    else {
-                                        System.out.printf("%.2f", -(this.Mtrx[temp][j]));
-                                        System.out.printf("%c ", param[j]);
+                                } 
+                            }
+                            else{
+                                System.out.printf("X%d = %.2f ", temp2+1, this.Mtrx[temp][this.Col-1]);
+                                for (int j=temp2+1; j<this.Col-1; j++){
+                                    if (this.Mtrx[temp][j] != 0){
+                                        if (this.Mtrx[temp][j] < 0d) {
+                                            System.out.printf("+ %.2f", -(this.Mtrx[temp][j]));
+                                            System.out.printf("%c ", param[j]);
+                                        }
+                                        else {
+                                            System.out.printf("%.2f", -(this.Mtrx[temp][j]));
+                                            System.out.printf("%c ", param[j]);
+                                        }
                                     }
-                                }
-                            }                        
+                                } 
+                            }                       
                         }
                     }
                 }
@@ -1080,20 +1151,11 @@ public class Matriks {
             else {
                 System.out.printf("SPL memiliki solusi unik");
                 System.out.println();
-                double sol[] =  new double[this.Col-1];
-                for (int k = this.Col-2; k >= 0; k--){
-                    sol[k] = this.Mtrx[k][this.Col-1];
-                    for (int l = k+1; l < this.Col-1; l++){
-                        sol[k] -= this.Mtrx[k][l]*sol[l];
-                    }
-                    sol[k] /= this.Mtrx[k][k];
-                }
                 System.out.printf("Solusi adalah:");
                 System.out.println();
-                for (int i = 0; i < this.Col-1; i++)
-                {
+                for (int i = 0; i < this.Row-1; i++){
                     System.out.printf("X%d = ", i+1);
-                    System.out.printf("%.2f", sol[i]);
+                    System.out.printf("%.2f", this.Mtrx[i][this.Col-1]);
                     System.out.println();
                 }
             }
