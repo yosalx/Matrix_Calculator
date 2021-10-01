@@ -125,16 +125,18 @@ public class Matriks {
             bn = new double[countrow+1];
             j = 0;
 
-            for (i = 0; i < this.Row; i++) {
+            for (i = 0; i < countrow; i++) {
                 this.Mtrx[i][j] = 1;
             }
             int param = 0;
             for (i = RowMin; i < countrow; i++) {
                 an[i] = Double.parseDouble(num.get(param));
                 bn[i] = Double.parseDouble(num.get(param+1));
+                param = param+2;
+            }
+            for (i = 0; i < countrow; i++) {
                 for (j = 1; j < countrow; j++) {
                     this.Mtrx[i][j] = (double) Math.pow(an[i], j);
-                    param++;
                 }
             }
             for (i = RowMin; i < this.Row; i++) {
@@ -684,6 +686,419 @@ public class Matriks {
             this.hasInverse = true;
         }
     }
+
+    void findsplwithGauss(boolean toFile){
+        this.elimGauss();
+        boolean noSol = false;
+        boolean multSol = false;
+        if (this.Row == this.Col-1){
+            if (this.Mtrx[this.Row-1][this.Col-1] != 0d) {
+                noSol = true;
+                for (int i=0; i < this.Col-2; i++) {
+                    if (this.Mtrx[this.Row-1][i] == 0d) {
+                        noSol = false;
+                    }
+                }
+            }
+            else {
+                multSol = true;
+                for (int j=0; j < this.Col-2; j++){
+                    if (this.Mtrx[this.Row-1][j] != 0d) {
+                        multSol = false;
+                    }
+                }
+            }
+        }
+        else if (this.Row >= this.Col){
+            if (this.Mtrx[this.Col-1][this.Col-1] != 0d) {
+                noSol = true;
+                for (int i=0; i < this.Col-2; i++) {
+                    if (this.Mtrx[this.Col-1][i] == 0d) {
+                        noSol = false;
+                    }
+                }
+            }
+            else {
+                multSol = true;
+                for (int j=0; j < this.Col-2; j++){
+                    if (this.Mtrx[this.Col-1][j] != 0d) {
+                        multSol = false;
+                    }
+                }
+            }         
+        }
+        else{
+            multSol = true;
+        }
+        if(toFile){
+            try {
+                FileWriter writer = new FileWriter("outputfindSPLwithGauss.txt");
+                if (noSol) {
+                    writer.write("SPL tidak memiliki solusi");
+                }
+                else if (multSol) {
+                    writer.write("SPL memiliki banyak solusi");
+                    writer.write("\n");
+                    char [] param = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+                    for (int i=0; i < this.Col-1; i++){
+                        writer.write("X" + (i+1) + " = ");
+                        writer.write(param[i]);
+                        writer.write("\n");
+                    }
+                    for (int i=0; i < this.Row; i++) {
+                        if (this.Mtrx[i][i] == 1d) {
+                            if (this.Mtrx[i][this.Col-1] != 0d){
+                                writer.write("X"+ (i+1) +" = " + this.Mtrx[i][this.Col-1]);
+                                for (int j=i+1; j<this.Col-1; j++){
+                                    if (this.Mtrx[i][j] != 0){
+                                        if (this.Mtrx[i][j] < 0d) {
+                                            writer.write("+ " + Math.abs((this.Mtrx[i][j])) + param[j] + " ");
+                                            //writer.write(param[j]);
+                                        }
+                                        else {
+                                            writer.write("-" + (this.Mtrx[i][j]) + param[j] + " ");
+                                            //writer.write(param[j]);
+                                        }
+                                    }
+                                }                        
+                            }
+                            else {
+                                writer.write("X"+ (i+1) +" = " );
+                                for (int j=i+1; j<this.Col-1; j++){
+                                    if (this.Mtrx[i][j] != 0){
+                                        writer.write(" "+ Math.abs((this.Mtrx[i][j])) + param[j]);
+                                        //writer.write(param[j]);
+                                    }
+                                }                        
+                            }
+                        }
+                        else {
+                            int temp = i;
+                            i +=1;
+                            if (this.Mtrx[temp][this.Col-1] != 0d){
+                                writer.write("X" + (i+1) +" = " + this.Mtrx[temp][this.Col-1]);
+                                for (int j=i+1; j<this.Col-1; j++){
+                                    if (this.Mtrx[temp][j] != 0){
+                                        if (this.Mtrx[temp][j] < 0d) {
+                                            writer.write("+ " + (-(this.Mtrx[temp][j])));
+                                            writer.write(param[j]);
+                                        }
+                                        else {
+                                            writer.write("-" +this.Mtrx[temp][j] + param[j]);
+                                            //writer.write(param[j]);
+                                        }
+                                    }
+                                }                        
+                            }
+                        }
+                    }
+                }
+                else {
+                    writer.write("SPL memiliki solusi unik");
+                    writer.write("");
+                    double sol[] =  new double[this.Col-1];
+                    for (int k = this.Col-2; k >= 0; k--){
+                        sol[k] = this.Mtrx[k][this.Col-1];
+                        for (int l = k+1; l < this.Col-1; l++){
+                            sol[k] -= this.Mtrx[k][l]*sol[l];
+                        }
+                        sol[k] /= this.Mtrx[k][k];
+                    }
+                    writer.write("Solusi adalah:");
+                    writer.write(" ");
+                    for (int i = 0; i < this.Col-1; i++)
+                    {
+                        writer.write("X" + (i+1) + " = " + sol[i]);
+                        //writer.write(sol[i]);
+                        writer.write("");
+                    }
+                }
+                writer.close();
+                System.out.println("Berhasil dicetak di file");
+            }
+            catch (IOException e) {
+                System.out.println("Ada error: ");
+                e.printStackTrace();
+            }
+        }
+        else{
+            if (noSol) {
+                System.out.printf("SPL tidak memiliki solusi");
+            }
+            else if (multSol) {
+                System.out.printf("SPL memiliki banyak solusi");
+                System.out.println();
+                char [] param = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+                for (int i=0; i < this.Col-1; i++){
+                    System.out.printf("X%d = ", i+1);
+                    System.out.printf("%c", param[i]);
+                    System.out.println();
+                }
+                for (int i=0; i < this.Row; i++) {
+                    if (this.Mtrx[i][i] == 1d) {
+                        if (this.Mtrx[i][this.Col-1] != 0d){
+                            System.out.printf("X%d = %.2f ", i+1, this.Mtrx[i][this.Col-1]);
+                            for (int j=i+1; j<this.Col-1; j++){
+                                if (this.Mtrx[i][j] != 0){
+                                    if (this.Mtrx[i][j] < 0d) {
+                                        System.out.printf("+ %.2f", -(this.Mtrx[i][j]));
+                                        System.out.printf("%c ", param[j]);
+                                    }
+                                    else {
+                                        System.out.printf("%.2f", -(this.Mtrx[i][j]));
+                                        System.out.printf("%c ", param[j]);
+                                    }
+                                }
+                            }                        
+                        }
+                        else {
+                            System.out.printf("X%d = ", i+1);
+                            for (int j=i+1; j<this.Col-1; j++){
+                                if (this.Mtrx[i][j] != 0){
+                                    System.out.printf("%.2f", -(this.Mtrx[i][j]));
+                                    System.out.printf("%c ", param[j]);
+                                }
+                            }                        
+                        }
+                    }
+                    else {
+                        int temp = i;
+                        i +=1;
+                        if (this.Mtrx[temp][this.Col-1] != 0d){
+                            System.out.printf("X%d = %.2f ", i+1, this.Mtrx[temp][this.Col-1]);
+                            for (int j=i+1; j<this.Col-1; j++){
+                                if (this.Mtrx[temp][j] != 0){
+                                    if (this.Mtrx[temp][j] < 0d) {
+                                        System.out.printf("+ %.2f", -(this.Mtrx[temp][j]));
+                                        System.out.printf("%c ", param[j]);
+                                    }
+                                    else {
+                                        System.out.printf("%.2f", -(this.Mtrx[temp][j]));
+                                        System.out.printf("%c ", param[j]);
+                                    }
+                                }
+                            }                        
+                        }
+                    }
+                }
+            }
+            else {
+                System.out.printf("SPL memiliki solusi unik");
+                System.out.println();
+                double sol[] =  new double[this.Col-1];
+                for (int k = this.Col-2; k >= 0; k--){
+                    sol[k] = this.Mtrx[k][this.Col-1];
+                    for (int l = k+1; l < this.Col-1; l++){
+                        sol[k] -= this.Mtrx[k][l]*sol[l];
+                    }
+                    sol[k] /= this.Mtrx[k][k];
+                }
+                System.out.printf("Solusi adalah:");
+                System.out.println();
+                for (int i = 0; i < this.Col-1; i++)
+                {
+                    System.out.printf("X%d = ", i+1);
+                    System.out.printf("%.2f", sol[i]);
+                    System.out.println();
+                }
+            }
+        }
+    }
+
+    public void findsplwithGaussJordan(boolean toFile){
+        this.elimGaussJordan();
+        boolean noSol = false;
+        boolean multSol = false;
+        if (this.Mtrx[this.Row-1][this.Col-1] != 0d) {
+            noSol = true;
+            for (int i=0; i < this.Col-2; i++) {
+                if (this.Mtrx[this.Row-1][i] == 0d) {
+                    noSol = false;
+                }
+            }
+        }
+        else {
+            multSol = true;
+            for (int j=0; j < this.Col-2; j++){
+                if (this.Mtrx[this.Row-1][j] != 0d) {
+                    multSol = false;
+                }
+            }
+        }
+        if(toFile){
+            try {
+                FileWriter writer = new FileWriter("outputfindSPLwithGaussJordan.txt");
+                if (noSol) {
+                    writer.write("SPL tidak memiliki solusi");
+                }
+                else if (multSol) {
+                    writer.write("SPL memiliki banyak solusi");
+                    writer.write("\n");
+                    char [] param = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+                    for (int i=0; i < this.Col-1; i++){
+                        writer.write("X" + (i+1) + " = ");
+                        writer.write(param[i]);
+                        writer.write("\n");
+                    }
+                    for (int i=0; i < this.Row; i++) {
+                        if (this.Mtrx[i][i] == 1d) {
+                            if (this.Mtrx[i][this.Col-1] != 0d){
+                                writer.write("X"+ (i+1) +" = " + this.Mtrx[i][this.Col-1]);
+                                for (int j=i+1; j<this.Col-1; j++){
+                                    if (this.Mtrx[i][j] != 0){
+                                        if (this.Mtrx[i][j] < 0d) {
+                                            writer.write("+ " + Math.abs((this.Mtrx[i][j])) + param[j] + " ");
+                                            //writer.write(param[j]);
+                                        }
+                                        else {
+                                            writer.write("-" + (this.Mtrx[i][j]) + param[j] + " ");
+                                            //writer.write(param[j]);
+                                        }
+                                    }
+                                }                        
+                            }
+                            else {
+                                writer.write("X"+ (i+1) +" = " );
+                                for (int j=i+1; j<this.Col-1; j++){
+                                    if (this.Mtrx[i][j] != 0){
+                                        writer.write(" "+ Math.abs((this.Mtrx[i][j])) + param[j]);
+                                        //writer.write(param[j]);
+                                    }
+                                }                        
+                            }
+                        }
+                        else {
+                            int temp = i;
+                            i +=1;
+                            if (this.Mtrx[temp][this.Col-1] != 0d){
+                                writer.write("X" + (i+1) +" = " + this.Mtrx[temp][this.Col-1]);
+                                for (int j=i+1; j<this.Col-1; j++){
+                                    if (this.Mtrx[temp][j] != 0){
+                                        if (this.Mtrx[temp][j] < 0d) {
+                                            writer.write("+ " + (-(this.Mtrx[temp][j])));
+                                            writer.write(param[j]);
+                                        }
+                                        else {
+                                            writer.write("-" +this.Mtrx[temp][j] + param[j]);
+                                            //writer.write(param[j]);
+                                        }
+                                    }
+                                }                        
+                            }
+                        }
+                    }
+                }
+                else {
+                    writer.write("SPL memiliki solusi unik");
+                    writer.write("");
+                    double sol[] =  new double[this.Col-1];
+                    for (int k = this.Col-2; k >= 0; k--){
+                        sol[k] = this.Mtrx[k][this.Col-1];
+                        for (int l = k+1; l < this.Col-1; l++){
+                            sol[k] -= this.Mtrx[k][l]*sol[l];
+                        }
+                        sol[k] /= this.Mtrx[k][k];
+                    }
+                    writer.write("Solusi adalah:");
+                    writer.write(" ");
+                    for (int i = 0; i < this.Col-1; i++)
+                    {
+                        writer.write("X" + (i+1) + " = " + sol[i]);
+                        //writer.write(sol[i]);
+                        writer.write("");
+                    }
+                }
+                writer.close();
+                System.out.println("Berhasil dicetak di file");
+            }
+            catch (IOException e) {
+                System.out.println("Ada error: ");
+                e.printStackTrace();
+            }
+        }
+        else{
+            if (noSol) {
+                System.out.printf("SPL tidak memiliki solusi");
+            }
+            else if (multSol) {
+                System.out.printf("SPL memiliki banyak solusi");
+                System.out.println();
+                char [] param = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+                for (int i=0; i < this.Col-1; i++){
+                    System.out.printf("X%d = ", i+1);
+                    System.out.printf("%c", param[i]);
+                    System.out.println();
+                }
+                for (int i=0; i < this.Row; i++) {
+                    if (this.Mtrx[i][i] == 1d) {
+                        if (this.Mtrx[i][this.Col-1] != 0d){
+                            System.out.printf("X%d = %.2f ", i+1, this.Mtrx[i][this.Col-1]);
+                            for (int j=i+1; j<this.Col-1; j++){
+                                if (this.Mtrx[i][j] != 0){
+                                    if (this.Mtrx[i][j] < 0d) {
+                                        System.out.printf("+ %.2f", -(this.Mtrx[i][j]));
+                                        System.out.printf("%c ", param[j]);
+                                    }
+                                    else {
+                                        System.out.printf("%.2f", -(this.Mtrx[i][j]));
+                                        System.out.printf("%c ", param[j]);
+                                    }
+                                }
+                            }                        
+                        }
+                        else {
+                            System.out.printf("X%d = ", i+1);
+                            for (int j=i+1; j<this.Col-1; j++){
+                                if (this.Mtrx[i][j] != 0){
+                                    System.out.printf("%.2f", -(this.Mtrx[i][j]));
+                                    System.out.printf("%c ", param[j]);
+                                }
+                            }                        
+                        }
+                    }
+                    else {
+                        int temp = i;
+                        i +=1;
+                        if (this.Mtrx[temp][this.Col-1] != 0d){
+                            System.out.printf("X%d = %.2f ", i+1, this.Mtrx[temp][this.Col-1]);
+                            for (int j=i+1; j<this.Col-1; j++){
+                                if (this.Mtrx[temp][j] != 0){
+                                    if (this.Mtrx[temp][j] < 0d) {
+                                        System.out.printf("+ %.2f", -(this.Mtrx[temp][j]));
+                                        System.out.printf("%c ", param[j]);
+                                    }
+                                    else {
+                                        System.out.printf("%.2f", -(this.Mtrx[temp][j]));
+                                        System.out.printf("%c ", param[j]);
+                                    }
+                                }
+                            }                        
+                        }
+                    }
+                }
+            }
+            else {
+                System.out.printf("SPL memiliki solusi unik");
+                System.out.println();
+                double sol[] =  new double[this.Col-1];
+                for (int k = this.Col-2; k >= 0; k--){
+                    sol[k] = this.Mtrx[k][this.Col-1];
+                    for (int l = k+1; l < this.Col-1; l++){
+                        sol[k] -= this.Mtrx[k][l]*sol[l];
+                    }
+                    sol[k] /= this.Mtrx[k][k];
+                }
+                System.out.printf("Solusi adalah:");
+                System.out.println();
+                for (int i = 0; i < this.Col-1; i++)
+                {
+                    System.out.printf("X%d = ", i+1);
+                    System.out.printf("%.2f", sol[i]);
+                    System.out.println();
+                }
+            }
+        }
+    }
     
     public void findSPLwithInv(boolean toFile) {
         Matriks matPers = new Matriks();
@@ -703,7 +1118,7 @@ public class Matriks {
         }
 
         matPers.inversGaussWrite();
-        if(this.hasInverse){
+        if(matPers.hasInverse){
             for (i = RowMin; i < this.Row; i++) {
                 for (j = ColMin; j < this.Col - 1; j++) {
                     solution[i] += matPers.Mtrx[i][j]*colHasil.Mtrx[j][0]; 
@@ -712,7 +1127,7 @@ public class Matriks {
             //matPers.writeMatrix();
             //colHasil.writeMatrix();
             for (i = RowMin; i < this.Row; i++) {
-                System.out.printf("x%d = %.5f ", i + 1, solution[i]);
+                System.out.printf("x%d = %.5f \n", i + 1, solution[i]);
             }
     
             if (toFile) {
@@ -726,7 +1141,7 @@ public class Matriks {
                     }
                     writer.write("Solusi SPL di atas adalah:\n");
                     for (i = RowMin; i < this.Row; i++) {
-                        writer.write("x" + (i+1) + " = " + solution[i] + " "); 
+                        writer.write("x" + (i+1) + " = " + solution[i] + " \n"); 
                     }
                     writer.close();
                     System.out.println("Berhasil dicetak di file");
@@ -758,7 +1173,7 @@ public class Matriks {
 
     public void polynomInterpolate(boolean toFile) {
         double keepPoint[];
-        keepPoint = new double[this.Col - 1];
+        keepPoint = new double[this.Row];
         int i, j;
         int zeroCol = 0;
         this.elimGaussJordan();
@@ -792,22 +1207,6 @@ public class Matriks {
             result += keepPoint[i] * Math.pow(find, i);
         }
         System.out.printf("P(%.5f) = %.5f\n", find, result);
-
-        /*if (toFile == true) {
-            PrintStream copyToFile = new PrintStream(new File("output.txt"));
-            System.setOut(copyToFile);
-            System.out.println("Persamaan akhir dari interpolasi adalah");
-            System.out.printf("P(x) = %.5f ", keepPoint[0]);
-            for (i = 1; i < this.Col - 1; i++) {
-                if (keepPoint[i] > 0) {
-                    System.out.printf("+ %.5fx^%d ", keepPoint[i], i);
-                }
-                if (keepPoint[i] < 0) {
-                    System.out.printf("+ (%.5fx^%d) ", keepPoint[i], i);
-                }
-            }
-            System.out.printf("P(%.5f) = %.5f\n", find, result);
-        }*/
 
         if (toFile) {
             try {

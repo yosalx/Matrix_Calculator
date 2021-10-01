@@ -1,0 +1,2 @@
+Persamaan Regresi Linear Berganda dari data adalah : Y = -0.0015972139123466213 + 0.9084323119049572x^1 - 0.0033358175567213613x^2 + 6.33854295698847E-4x^3 + 0.005379090389969458x^4
+Taksiran atau estimasi nilainya adalah:  Y = 45.228100901008425
