@@ -733,18 +733,18 @@ public class Matriks {
             }
         }
         else if (this.Row >= this.Col){
-            if (this.Mtrx[this.Col-1][this.Col-1] != 0d) {
+            if (this.Mtrx[this.Col-2][this.Col-1] != 0d) {
                 noSol = true;
-                for (int i=0; i < this.Col-2; i++) {
-                    if (this.Mtrx[this.Col-1][i] == 0d) {
+                for (int i=0; i < this.Col-1; i++) {
+                    if (this.Mtrx[this.Col-2][i] != 0d) {
                         noSol = false;
                     }
                 }
             }
             else {
                 multSol = true;
-                for (int j=0; j < this.Col-2; j++){
-                    if (this.Mtrx[this.Col-1][j] != 0d) {
+                for (int j=0; j < this.Col-1; j++){
+                    if (this.Mtrx[this.Col-2][j] == 0d) {
                         multSol = false;
                     }
                 }
@@ -979,18 +979,18 @@ public class Matriks {
             }
         }
         else if (this.Row >= this.Col){
-            if (this.Mtrx[this.Col-1][this.Col-1] != 0d) {
+            if (this.Mtrx[this.Col-2][this.Col-1] != 0d) {
                 noSol = true;
-                for (int i=0; i < this.Col-2; i++) {
-                    if (this.Mtrx[this.Col-1][i] == 0d) {
+                for (int i=0; i < this.Col-1; i++) {
+                    if (this.Mtrx[this.Col-2][i] != 0d) {
                         noSol = false;
                     }
                 }
             }
             else {
                 multSol = true;
-                for (int j=0; j < this.Col-2; j++){
-                    if (this.Mtrx[this.Col-1][j] != 0d) {
+                for (int j=0; j < this.Col-1; j++){
+                    if (this.Mtrx[this.Col-2][j] == 0d) {
                         multSol = false;
                     }
                 }
@@ -1078,7 +1078,7 @@ public class Matriks {
                     writer.write("\n");
                     writer.write("Solusi adalah:");
                     writer.write(" ");
-                    for (int i = 0; i < this.Row-1; i++){
+                    for (int i = 0; i < this.Row; i++){
                         writer.write("X" + (i+1) + " = ");
                         writer.write("" + this.Mtrx[i][this.Col-1]);
                         writer.write(" ");
@@ -1176,7 +1176,7 @@ public class Matriks {
                 System.out.println();
                 System.out.printf("Solusi adalah:");
                 System.out.println();
-                for (int i = 0; i < this.Row-1; i++){
+                for (int i = 0; i < this.Row; i++){
                     System.out.printf("X%d = ", i+1);
                     System.out.printf("%.2f", this.Mtrx[i][this.Col-1]);
                     System.out.println();
