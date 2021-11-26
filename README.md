@@ -3,10 +3,14 @@
 ### Matrice Calculator Project made to fulfill the first major task of IF2123 'Aljabar Linier dan Geometri' Class at Institut Teknologi Bandung.
 #### The program included Polynomial Interpolation, Multiple Linear Regression, Linear Equation System and Determinant calculation that done through various methods.
 
-- 13520107 Azka Syauqy Irsyad
-- 13520114 Kevin Roni
-- 13520141 Yoseph Alexander Siregar
 
+## Gasin Impact Group
+
+| NIM      | NAME                     |
+|----------|--------------------------|
+| 13520107 | Azka Syauqy Irsyad       |
+| 13520114 | Kevin Roni               |
+| 13520141 | Yoseph Alexander Siregar |
 
 ### Directory
 #### Src folder
