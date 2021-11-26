@@ -31,7 +31,7 @@ Matrix_Calculator
 4. Type `javac -d ../bin ./*java` in the  terminal, enter
 5. Type `cd ../bin` in the  terminal, enter
 6. Type `java src.Main` in the  terminal, enter
-7. Program can now be run
+7. Program can now be used
 
 > For case that require inputting a file, dont forget to also add '.txt.' after the file name
 
