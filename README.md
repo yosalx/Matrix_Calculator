@@ -24,10 +24,6 @@ Matrix_Calculator
 ├── test                    # Contains files that can be used to be tested in the program 
 ```
 
-#### Bin folder 
-Contains bytecode files compiled from the .java program created in the src folder.
-
-
 ### How to Compile and Run the program
 1. Clone this repository
 2. Open the terminal and go to where the repo is
