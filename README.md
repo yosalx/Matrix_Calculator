@@ -15,7 +15,7 @@
 ### Directory
 
 ```sh
-Image_Compression_With_SVD
+Matrix_Calculator
 ├── bin                     # Contains bytecode files compiled from the .java program created in the src folder.
 ├── doc                     # Contains reports on the results of this project
 ├── src                     # Contains .java program files in which there is source code that has been created.
