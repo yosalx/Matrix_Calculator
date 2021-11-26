@@ -13,17 +13,20 @@
 | 13520141 | Yoseph Alexander Siregar |
 
 ### Directory
-#### Src folder
-Contains .java program files in which there is source code that has been created.
+
+```sh
+Image_Compression_With_SVD
+├── bin                     # Contains bytecode files compiled from the .java program created in the src folder.
+├── doc                     # Contains reports on the results of this project
+├── src                     # Contains .java program files in which there is source code that has been created.
+│   ├── main                # Main program
+│   ├── matriks             # Matrix Calculator Source Code
+├── test                    # Contains files that can be used to be tested in the program 
+```
 
 #### Bin folder 
 Contains bytecode files compiled from the .java program created in the src folder.
 
-#### Docs folder 
-Contains reports on the results of this project
-
-#### Test folder 
-Contains files that can be used to be tested in the program that has been created.
 
 ### How to Compile and Run the program
 1. Clone this repository
